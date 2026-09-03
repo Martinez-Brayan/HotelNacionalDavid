@@ -1,3 +1,5 @@
+
+
 const translations = {
     es: {
         'nav.home': 'Inicio',

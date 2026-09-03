@@ -1,5 +1,4 @@
 {
-  "routes": [
-    { "src": "/(.*)", "dest": "/Hotel.html" }
-  ]
+  "cleanUrls": true,
+  "trailingSlash": false
 }
