@@ -1,173 +1,10 @@
 
+// Detecta el idioma de la página desde el atributo lang del HTML
+// index.html → 'es' | index-en.html → 'en'
+const pageLang = document.documentElement.lang || 'es';
+const isEn = pageLang === 'en';
 
-const translations = {
-    es: {
-        'nav.home': 'Inicio',
-        'nav.rooms': 'Habitaciones',
-        'nav.services': 'Servicios',
-        'nav.restaurant': 'Restaurante',
-        'nav.gallery': 'Galería',
-        'nav.location': 'Ubicación',
-        'nav.contact': 'Contacto',
-        'nav.bookNow': 'Reservar Ahora',
-        'hero.title': 'Tu descanso perfecto comienza aquí',
-        'hero.subtitle': 'Habitaciones cómodas, excelente ubicación y atención personalizada',
-        'hero.viewRooms': 'Ver Habitaciones',
-        'hero.bookButton': 'Reservar Ahora',
-        'search.checkin': 'Fecha de Llegada',
-        'search.checkout': 'Fecha de Salida',
-        'search.guests': 'Personas',
-        'search.search': 'Buscar',
-        'guest.1': '1 Persona',
-        'guest.2': '2 Personas',
-        'guest.3': '3 Personas',
-        'guest.4': '4 Personas',
-        'guest.5': '5+ Personas',
-        'rooms.title': 'Nuestras Habitaciones',
-        'rooms.subtitle': 'Descubre el confort de nuestras instalaciones',
-        'services.title': 'Servicios del Hotel',
-        'why.title': '¿Por Qué Elegirnos?',
-        'restaurant.title': 'Nuestro Restaurante',
-        'restaurant.subtitle': 'Deléitate con nuestras exquisitas opciones culinarias',
-        'gallery.title': 'Galería',
-        'gallery.subtitle': 'Visualiza la belleza de nuestro hotel',
-        'experiences.title': 'Experiencias Especiales',
-        'reviews.title': 'Opiniones de Clientes',
-        'location.title': 'Ubicación',
-        'faq.title': 'Preguntas Frecuentes',
-        'booking.title': 'Formulario de Reserva',
-        'booking.roomType': 'Tipo de Habitación',
-        'booking.checkin': 'Fecha de Llegada',
-        'booking.checkout': 'Fecha de Salida',
-        'booking.guests': 'Número de Personas',
-        'booking.fullName': 'Nombre Completo',
-        'booking.email': 'Email',
-        'booking.phone': 'Teléfono / WhatsApp',
-        'booking.message': 'Mensaje o Solicitudes Especiales',
-        'booking.messagePlaceholder': 'Cuéntanos sobre tus necesidades especiales...',
-        'booking.submit': 'Realizar Reserva'
-    },
-    en: {
-        'nav.home': 'Home',
-        'nav.rooms': 'Rooms',
-        'nav.services': 'Services',
-        'nav.restaurant': 'Restaurant',
-        'nav.gallery': 'Gallery',
-        'nav.location': 'Location',
-        'nav.contact': 'Contact',
-        'nav.bookNow': 'Book Now',
-        'hero.title': 'Your perfect getaway starts here',
-        'hero.subtitle': 'Comfortable rooms, excellent location and personalized service',
-        'hero.viewRooms': 'View Rooms',
-        'hero.bookButton': 'Book Now',
-        'search.checkin': 'Check-in Date',
-        'search.checkout': 'Check-out Date',
-        'search.guests': 'Guests',
-        'search.search': 'Search',
-        'guest.1': '1 Guest',
-        'guest.2': '2 Guests',
-        'guest.3': '3 Guests',
-        'guest.4': '4 Guests',
-        'guest.5': '5+ Guests',
-        'rooms.title': 'Our Rooms',
-        'rooms.subtitle': 'Discover the comfort of our facilities',
-        'services.title': 'Hotel Services',
-        'why.title': 'Why Choose Us?',
-        'restaurant.title': 'Our Restaurant',
-        'restaurant.subtitle': 'Indulge in our exquisite culinary options',
-        'gallery.title': 'Gallery',
-        'gallery.subtitle': 'See the beauty of our hotel',
-        'experiences.title': 'Special Experiences',
-        'reviews.title': 'Guest Reviews',
-        'location.title': 'Location',
-        'faq.title': 'Frequently Asked Questions',
-        'booking.title': 'Booking Form',
-        'booking.roomType': 'Room Type',
-        'booking.checkin': 'Check-in Date',
-        'booking.checkout': 'Check-out Date',
-        'booking.guests': 'Number of Guests',
-        'booking.fullName': 'Full Name',
-        'booking.email': 'Email',
-        'booking.phone': 'Phone / WhatsApp',
-        'booking.message': 'Message or Special Requests',
-        'booking.messagePlaceholder': 'Tell us about your special needs...',
-        'booking.submit': 'Book Now'
-    }
-};
-
-let currentLanguage = 'es';
-
-function initializeEventListeners() {
-    const btnEspanol = document.getElementById('btnEspanol');
-    const btnIngles = document.getElementById('btnIngles');
-
-    if (btnEspanol) {
-        btnEspanol.addEventListener('click', function() {
-            setLanguage('es');
-        });
-    }
-
-    if (btnIngles) {
-        btnIngles.addEventListener('click', function() {
-            setLanguage('en');
-        });
-    }
-}
-
-function setLanguage(lang) {
-    currentLanguage = lang;
-    localStorage.setItem('preferredLanguage', lang);
-    updateLanguageButtons();
-    applyTranslations();
-}
-
-function loadLanguagePreference() {
-    const saved = localStorage.getItem('preferredLanguage');
-    if (saved) {
-        currentLanguage = saved;
-    } else {
-        const browserLang = navigator.language || navigator.userLanguage;
-        currentLanguage = browserLang.startsWith('es') ? 'es' : 'en';
-    }
-    updateLanguageButtons();
-    applyTranslations();
-}
-
-function updateLanguageButtons() {
-    const btnEspanol = document.getElementById('btnEspanol');
-    const btnIngles = document.getElementById('btnIngles');
-
-    if (btnEspanol && btnIngles) {
-        btnEspanol.classList.toggle('active', currentLanguage === 'es');
-        btnIngles.classList.toggle('active', currentLanguage === 'en');
-    }
-}
-
-function applyTranslations() {
-    document.querySelectorAll('[data-i18n]').forEach(element => {
-        const key = element.dataset.i18n;
-        const value = translations[currentLanguage][key];
-        if (value) {
-            element.textContent = value;
-        }
-    });
-
-    document.querySelectorAll('[data-i18n-option]').forEach(option => {
-        const key = option.dataset.i18nOption;
-        const value = translations[currentLanguage][key];
-        if (value) {
-            option.textContent = value;
-        }
-    });
-
-    document.querySelectorAll('[data-i18n-placeholder]').forEach(element => {
-        const key = element.dataset.i18nPlaceholder;
-        const value = translations[currentLanguage][key];
-        if (value) {
-            element.placeholder = value;
-        }
-    });
-}
+// ── Navegación ────────────────────────────────────────────────────────────────
 
 function setupNavigation() {
     const hamburger = document.getElementById('hamburger');
@@ -175,12 +12,12 @@ function setupNavigation() {
     const navLinks = document.querySelectorAll('.nav-link');
 
     if (hamburger) {
-        hamburger.addEventListener('click', function() {
+        hamburger.addEventListener('click', function () {
             navbar.classList.toggle('active');
             hamburger.classList.toggle('active');
         });
 
-        hamburger.addEventListener('keydown', function(event) {
+        hamburger.addEventListener('keydown', function (event) {
             if (event.key === 'Enter' || event.key === ' ') {
                 event.preventDefault();
                 hamburger.click();
@@ -189,52 +26,93 @@ function setupNavigation() {
     }
 
     navLinks.forEach(link => {
-        link.addEventListener('click', function() {
+        link.addEventListener('click', function () {
             navbar.classList.remove('active');
-            if (hamburger) {
-                hamburger.classList.remove('active');
-            }
+            if (hamburger) hamburger.classList.remove('active');
         });
     });
 
-    window.addEventListener('scroll', function() {
-        if (navbar) {
-            navbar.classList.remove('active');
-        }
-        if (hamburger) {
-            hamburger.classList.remove('active');
-        }
+    window.addEventListener('scroll', function () {
+        if (navbar) navbar.classList.remove('active');
+        if (hamburger) hamburger.classList.remove('active');
     });
 }
+
+// ── Fechas ────────────────────────────────────────────────────────────────────
+
+function formatDateToISO(date) {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+}
+
+function setupDateInputs() {
+    const today = new Date();
+    const todayISO = formatDateToISO(today);
+
+    const tomorrow = new Date(today);
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    const tomorrowISO = formatDateToISO(tomorrow);
+
+    // Buscador rápido del hero
+    const checkinHero = document.getElementById('checkin');
+    const checkoutHero = document.getElementById('checkout');
+    if (checkinHero) {
+        checkinHero.min = todayISO;
+        checkinHero.addEventListener('change', function () {
+            if (checkoutHero) {
+                const nextDay = new Date(this.value);
+                nextDay.setDate(nextDay.getDate() + 1);
+                checkoutHero.min = formatDateToISO(nextDay);
+                if (checkoutHero.value && checkoutHero.value <= this.value) {
+                    checkoutHero.value = '';
+                }
+            }
+        });
+    }
+    if (checkoutHero) checkoutHero.min = tomorrowISO;
+
+    // Formulario de reserva
+    const checkinForm = document.getElementById('reservaCheckin');
+    const checkoutForm = document.getElementById('reservaCheckout');
+    if (checkinForm) {
+        checkinForm.min = todayISO;
+        checkinForm.addEventListener('change', function () {
+            if (checkoutForm) {
+                const nextDay = new Date(this.value);
+                nextDay.setDate(nextDay.getDate() + 1);
+                checkoutForm.min = formatDateToISO(nextDay);
+                if (checkoutForm.value && checkoutForm.value <= this.value) {
+                    checkoutForm.value = '';
+                }
+            }
+        });
+    }
+    if (checkoutForm) checkoutForm.min = tomorrowISO;
+}
+
+// ── Formularios ───────────────────────────────────────────────────────────────
 
 function setupFormHandling() {
     const reservationForm = document.getElementById('formularioReserva');
     const contactForm = document.getElementById('contactForm');
 
     if (reservationForm) {
-        reservationForm.addEventListener('submit', function(event) {
+        reservationForm.addEventListener('submit', function (event) {
             event.preventDefault();
             handleReservationSubmit(this);
         });
     }
 
     if (contactForm) {
-        contactForm.addEventListener('submit', function(event) {
+        contactForm.addEventListener('submit', function (event) {
             event.preventDefault();
             handleContactSubmit(this);
         });
     }
 
-    const checkinInputs = document.querySelectorAll('input[type="date"][name="checkin"]');
-    checkinInputs.forEach(input => {
-        input.addEventListener('change', function() {
-            const today = new Date().toISOString().split('T')[0];
-            if (this.value < today) {
-                alert(currentLanguage === 'es' ? 'La fecha debe ser futura' : 'The date must be in the future');
-                this.value = '';
-            }
-        });
-    });
+    setupDateInputs();
 }
 
 function handleReservationSubmit(form) {
@@ -242,21 +120,25 @@ function handleReservationSubmit(form) {
     const data = Object.fromEntries(formData);
 
     if (!data.habitacion || !data.nombre || !data.email || !data.telefono || !data.checkin || !data.checkout) {
-        alert(currentLanguage === 'es' ? 'Por favor completa todos los campos' : 'Please complete all fields');
+        alert(isEn
+            ? 'Please complete all required fields.'
+            : 'Por favor completa todos los campos requeridos.');
         return;
     }
 
     const checkin = new Date(data.checkin);
     const checkout = new Date(data.checkout);
     if (checkout <= checkin) {
-        alert(currentLanguage === 'es' ? 'La fecha de salida debe ser posterior a la de llegada' : 'Checkout date must be after check-in date');
+        alert(isEn
+            ? 'Check-out date must be after check-in date.'
+            : 'La fecha de salida debe ser posterior a la de llegada.');
         return;
     }
 
     console.log('Datos de reserva:', data);
-    alert(currentLanguage === 'es'
-        ? '¡Gracias! Tu reserva ha sido recibida. Nos pondremos en contacto pronto.'
-        : 'Thank you! Your booking request has been received. We will contact you soon.');
+    alert(isEn
+        ? 'Thank you! Your booking request has been received. We will contact you soon.'
+        : '¡Gracias! Tu reserva ha sido recibida. Nos pondremos en contacto pronto.');
 
     form.reset();
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -267,50 +149,54 @@ function handleContactSubmit(form) {
     const data = Object.fromEntries(formData);
 
     if (!data.nombre || !data.email || !data.telefono || !data.mensaje) {
-        alert(currentLanguage === 'es' ? 'Completa nombre, email, teléfono y mensaje.' : 'Please complete name, email, phone and message.');
+        alert(isEn
+            ? 'Please complete name, email, phone and message.'
+            : 'Completa nombre, email, teléfono y mensaje.');
         return;
     }
 
     console.log('Mensaje de contacto:', data);
-    alert(currentLanguage === 'es'
-        ? '¡Mensaje enviado! Te responderemos a la brevedad.'
-        : 'Message sent! We will get back to you soon.');
+    alert(isEn
+        ? 'Message sent! We will get back to you soon.'
+        : '¡Mensaje enviado! Te responderemos a la brevedad.');
 
     form.reset();
 }
 
+// ── Buscador rápido ───────────────────────────────────────────────────────────
+
 function setupQuickSearch() {
     const btnSearch = document.querySelector('.btn-search');
-    if (!btnSearch) {
-        return;
-    }
+    if (!btnSearch) return;
 
-    btnSearch.addEventListener('click', function() {
+    btnSearch.addEventListener('click', function () {
         const checkin = document.getElementById('checkin').value;
         const checkout = document.getElementById('checkout').value;
         const personas = document.getElementById('personas').value;
 
         if (!checkin || !checkout) {
-            alert(currentLanguage === 'es' ? 'Por favor selecciona las fechas' : 'Please select dates');
+            alert(isEn ? 'Please select dates.' : 'Por favor selecciona las fechas.');
             return;
         }
 
         const ci = new Date(checkin);
         const co = new Date(checkout);
         if (co <= ci) {
-            alert(currentLanguage === 'es' ? 'Las fechas no son válidas' : 'Invalid dates');
+            alert(isEn ? 'Invalid dates.' : 'Las fechas no son válidas.');
             return;
         }
 
         document.getElementById('habitaciones').scrollIntoView({ behavior: 'smooth', block: 'start' });
 
-        setTimeout(function() {
-            alert(currentLanguage === 'es'
-                ? `Se encontraron habitaciones para ${personas} persona(s) del ${checkin} al ${checkout}`
-                : `Found rooms for ${personas} guest(s) from ${checkin} to ${checkout}`);
+        setTimeout(function () {
+            alert(isEn
+                ? `Found rooms for ${personas} guest(s) from ${checkin} to ${checkout}.`
+                : `Se encontraron habitaciones para ${personas} persona(s) del ${checkin} al ${checkout}.`);
         }, 500);
     });
 }
+
+// ── Animaciones de scroll ─────────────────────────────────────────────────────
 
 function setupScrollAnimations() {
     const observerOptions = {
@@ -318,7 +204,7 @@ function setupScrollAnimations() {
         rootMargin: '0px 0px -50px 0px'
     };
 
-    const observer = new IntersectionObserver(function(entries) {
+    const observer = new IntersectionObserver(function (entries) {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
                 entry.target.style.opacity = '1';
@@ -333,6 +219,8 @@ function setupScrollAnimations() {
     });
 }
 
+// ── Anclas suaves ─────────────────────────────────────────────────────────────
+
 function setupAnchorLinks() {
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', function (event) {
@@ -345,24 +233,21 @@ function setupAnchorLinks() {
     });
 }
 
-function setupHeaderShadow() {
-    window.addEventListener('scroll', function() {
-        const header = document.querySelector('.header');
-        if (!header) {
-            return;
-        }
+// ── Sombra del header al hacer scroll ────────────────────────────────────────
 
-        if (window.scrollY > 50) {
-            header.style.boxShadow = '0 6px 20px rgba(0, 0, 0, 0.15)';
-        } else {
-            header.style.boxShadow = '0 4px 15px rgba(0, 0, 0, 0.1)';
-        }
+function setupHeaderShadow() {
+    window.addEventListener('scroll', function () {
+        const header = document.querySelector('.header');
+        if (!header) return;
+        header.style.boxShadow = window.scrollY > 50
+            ? '0 6px 20px rgba(0, 0, 0, 0.15)'
+            : '0 4px 15px rgba(0, 0, 0, 0.1)';
     });
 }
 
-document.addEventListener('DOMContentLoaded', function() {
-    initializeEventListeners();
-    loadLanguagePreference();
+// ── Inicialización ────────────────────────────────────────────────────────────
+
+document.addEventListener('DOMContentLoaded', function () {
     setupNavigation();
     setupFormHandling();
     setupQuickSearch();
@@ -371,4 +256,4 @@ document.addEventListener('DOMContentLoaded', function() {
     setupHeaderShadow();
 });
 
-console.log('Hotel Nacional David - Sitio web cargado correctamente');
+console.log('Hotel Nacional David — Sitio web cargado correctamente');
