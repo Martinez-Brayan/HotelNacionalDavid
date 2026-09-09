@@ -34,7 +34,7 @@ body {
 .container {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 0 20px;
+    padding: 0 clamp(12px, 3vw, 20px);
 }
 
 .header {
@@ -51,10 +51,10 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    gap: 1rem;
+    gap: clamp(0.5rem, 2vw, 1rem);
     max-width: 1220px;
     margin: 0 auto;
-    padding: 0 20px;
+    padding: 0 clamp(12px, 3vw, 20px);
 }
 
 .brand-lockup {
@@ -70,8 +70,8 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 150px;
-    height: 58px;
+    width: clamp(120px, 15vw, 150px);
+    height: clamp(46px, 6vw, 58px);
     flex-shrink: 0;
     overflow: hidden;
 }
@@ -101,7 +101,7 @@ body {
     display: flex;
     align-items: center;
     list-style: none;
-    gap: 1.6rem;
+    gap: clamp(0.8rem, 2vw, 1.6rem);
     margin: 0;
     padding: 0;
 }
@@ -112,9 +112,10 @@ body {
     transition: all 0.25s ease;
     font-weight: 600;
     letter-spacing: 0.02em;
-    font-size: 0.9rem;
+    font-size: clamp(0.75rem, 1vw, 0.9rem);
     text-transform: uppercase;
     position: relative;
+    white-space: nowrap;
 }
 
 .nav-link::after {
@@ -178,7 +179,7 @@ body {
 
 .hero-title {
     display: block;
-    font-size: clamp(3rem, 4vw, 5rem);
+    font-size: clamp(1.75rem, 6vw, 5rem);
     line-height: 0.82;
     font-weight: 900;
     letter-spacing: -0.09em;
@@ -226,12 +227,12 @@ body {
 .btn-reservar {
     background: linear-gradient(135deg, #d5a66d 0%, #b98d4f 100%);
     color: #fff;
-    min-width: 180px;
-    padding: 0.9rem 1.4rem;
+    min-width: clamp(140px, 30vw, 180px);
+    padding: clamp(0.7rem, 1vw, 0.9rem) clamp(1rem, 2vw, 1.4rem);
     border-radius: 0;
     text-decoration: none;
     font-weight: 700;
-    font-size: 1.1rem;
+    font-size: clamp(0.85rem, 1.2vw, 1.1rem);
     text-align: center;
     transition: all 0.3s ease;
     box-shadow: 0 10px 20px rgba(0,0,0,0.12);
@@ -282,8 +283,8 @@ body {
 
 .search-form {
     display: grid;
-    grid-template-columns: repeat(4, minmax(190px, 1fr));
-    gap: 20px;
+    grid-template-columns: repeat(auto-fit, minmax(clamp(150px, 90vw, 190px), 1fr));
+    gap: clamp(12px, 2vw, 20px);
     align-items: end;
     margin-bottom: 0;
 }
@@ -363,23 +364,23 @@ body {
     color: var(--primary-color);
 }
 
-section {
+section {clamp(40px, 8vw, 80px) clamp(12px, 3vw, 20px)
     padding: 80px 20px;
 }
 
 .section-title {
-    font-size: 2.5rem;
+    font-size: clamp(1.75rem, 4vw, 2.5rem);
     font-weight: bold;
     text-align: center;
-    margin-bottom: 15px;
+    margin-bottom: clamp(10px, 2vw, 15px);
     color: var(--text-dark);
 }
 
 .section-subtitle {
     text-align: center;
     color: var(--text-light);
-    font-size: 1.1rem;
-    margin-bottom: 50px;
+    font-size: clamp(0.9rem, 2vw, 1.1rem);
+    margin-bottom: clamp(30px, 5vw, 50px);
 }
 
 .habitaciones {
@@ -388,8 +389,8 @@ section {
 
 .habitaciones-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 30px;
+    grid-template-columns: repeat(auto-fit, minmax(clamp(260px, 90vw, 300px), 1fr));
+    gap: clamp(15px, 3vw, 30px);
 }
 
 .habitacion-card {
@@ -407,11 +408,11 @@ section {
 }
 
 .habitacion-image {
-    height: 220px;
+    height: clamp(180px, 40vw, 220px);
     position: relative;
     display: flex;
     align-items: flex-end;
-    padding: 20px;
+    padding: clamp(12px, 3vw, 20px);
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -427,12 +428,12 @@ section {
 }
 
 .habitacion-content {
-    padding: 25px;
+    padding: clamp(15px, 4vw, 25px);
 }
 
 .habitacion-content h3 {
-    font-size: 1.5rem;
-    margin-bottom: 15px;
+    font-size: clamp(1.25rem, 3vw, 1.5rem);
+    margin-bottom: clamp(10px, 2vw, 15px);
     color: var(--text-dark);
 }
 
@@ -483,13 +484,13 @@ section {
 
 .servicios-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 30px;
+    grid-template-columns: repeat(auto-fit, minmax(clamp(250px, 90vw, 280px), 1fr));
+    gap: clamp(15px, 3vw, 30px);
 }
 
 .servicio-card {
     text-align: center;
-    padding: 30px;
+    padding: clamp(20px, 4vw, 30px);
     border-radius: 10px;
     background: var(--bg-light);
     box-shadow: var(--shadow);
@@ -529,8 +530,8 @@ section {
 
 .caracteristicas-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 30px;
+    grid-template-columns: repeat(auto-fit, minmax(clamp(200px, 90vw, 250px), 1fr));
+    gap: clamp(15px, 3vw, 30px);
 }
 
 .caracteristica {
@@ -568,7 +569,7 @@ section {
 .restaurante-content {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 40px;
+    gap: clamp(25px, 5vw, 40px);
     align-items: center;
 }
 
@@ -605,8 +606,8 @@ section {
 
 .galeria-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 20px;
+    grid-template-columns: repeat(auto-fit, minmax(clamp(220px, 90vw, 250px), 1fr));
+    gap: clamp(12px, 2vw, 20px);
 }
 
 .galeria-item {
@@ -616,7 +617,7 @@ section {
 }
 
 .galeria-image {
-    height: 250px;
+    height: clamp(180px, 35vw, 250px);
     display: flex;
     align-items: flex-end;
     justify-content: center;
@@ -667,8 +668,8 @@ section {
 
 .experiencias-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 30px;
+    grid-template-columns: repeat(auto-fit, minmax(clamp(250px, 90vw, 280px), 1fr));
+    gap: clamp(15px, 3vw, 30px);
 }
 
 .experiencia-card {
@@ -751,8 +752,8 @@ section {
 
 .opiniones-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 30px;
+    grid-template-columns: repeat(auto-fit, minmax(clamp(280px, 90vw, 300px), 1fr));
+    gap: clamp(15px, 3vw, 30px);
 }
 
 .ubicacion {
@@ -762,7 +763,7 @@ section {
 .ubicacion-content {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 40px;
+    gap: clamp(25px, 5vw, 40px);
     align-items: start;
 }
 
@@ -828,8 +829,8 @@ section {
 
 .faq-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 30px;
+    grid-template-columns: repeat(auto-fit, minmax(clamp(280px, 90vw, 300px), 1fr));
+    gap: clamp(15px, 3vw, 30px);
 }
 
 .faq-item {
@@ -1146,6 +1147,38 @@ section {
     color: #95a5a6;
 }
 
+@media (max-width: 1024px) {
+    .container-header {
+        gap: 0.8rem;
+    }
+
+    .nav-link {
+        font-size: 0.8rem;
+        padding: 12px 10px;
+    }
+
+    .hero-content {
+        padding: 24px 20px 0;
+    }
+
+    .hero-title {
+        font-size: clamp(1.5rem, 5vw, 3.5rem);
+    }
+
+    .section-title {
+        font-size: clamp(1.5rem, 3.5vw, 2.2rem);
+    }
+
+    .restaurante-content,
+    .ubicacion-content {
+        gap: 30px;
+    }
+
+    .search-form {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
 @media (max-width: 768px) {
     .container-header {
         flex-wrap: wrap;
@@ -1180,16 +1213,16 @@ section {
     }
 
     .nav-link {
-        padding: 15px 20px;
+        padding: clamp(10px, 2vw, 15px) clamp(15px, 3vw, 20px);
         display: block;
     }
 
     .hero-title {
-        font-size: 2rem;
+        font-size: clamp(1.3rem, 4vw, 2rem);
     }
 
     .hero-subtitle {
-        font-size: 1rem;
+        font-size: clamp(0.85rem, 1.5vw, 1rem);
     }
 
     .search-form {
@@ -1197,7 +1230,7 @@ section {
     }
 
     .section-title {
-        font-size: 2rem;
+        font-size: clamp(1.4rem, 3vw, 2rem);
     }
 
     .habitaciones-grid,
@@ -1229,8 +1262,8 @@ section {
     .floating-book {
         right: 16px;
         bottom: 76px;
-        padding: 0.75rem 0.9rem;
-        font-size: 0.8rem;
+        padding: clamp(0.6rem, 1vw, 0.75rem) clamp(0.7rem, 1.5vw, 0.9rem);
+        font-size: clamp(0.7rem, 1.2vw, 0.8rem);
     }
 
     .whatsapp-float {
@@ -1242,7 +1275,7 @@ section {
     }
 
     .reserva-form {
-        padding: 20px;
+        padding: clamp(12px, 3vw, 20px);
     }
 }
 
@@ -1252,29 +1285,102 @@ section {
     }
 
     .logo {
-        width: 118px;
-        height: 46px;
+        width: clamp(100px, 20vw, 118px);
+        height: clamp(38px, 5vw, 46px);
     }
 
     .hero {
-        padding: 40px 20px;
-        min-height: 500px;
+        padding: clamp(30px, 5vw, 40px) clamp(12px, 3vw, 20px);
+        min-height: auto;
     }
 
     .hero-title {
-        font-size: 1.5rem;
+        font-size: clamp(1.2rem, 4.5vw, 1.5rem);
+        line-height: 1;
     }
 
     .section-title {
-        font-size: 1.5rem;
+        font-size: clamp(1.2rem, 3.5vw, 1.5rem);
     }
 
     section {
-        padding: 40px 20px;
+        padding: clamp(30px, 5vw, 40px) clamp(12px, 3vw, 20px);
     }
 
     .caracteristicas-grid {
         grid-template-columns: 1fr;
+    }
+
+    .btn {
+        padding: clamp(10px, 2vw, 12px) clamp(20px, 3vw, 30px);
+        font-size: clamp(0.8rem, 1.2vw, 0.95rem);
+    }
+
+    .btn-reservar {
+        min-width: clamp(120px, 25vw, 140px);
+        padding: clamp(0.6rem, 1vw, 0.75rem) clamp(0.8rem, 1.5vw, 1rem);
+        font-size: clamp(0.8rem, 1rem, 0.9rem);
+    }
+
+    .lang-btn {
+        width: clamp(45px, 10vw, 54px);
+        height: clamp(40px, 8vw, 48px);
+        font-size: clamp(0.8rem, 1.2vw, 0.95rem);
+    }
+
+    .hero-image {
+        min-height: clamp(300px, 60vw, 400px);
+    }
+
+    .habitacion-card {
+        margin-bottom: 10px;
+    }
+
+    .opinion-card {
+        padding: clamp(15px, 3vw, 20px);
+    }
+
+    .info-item {
+        margin-bottom: clamp(15px, 3vw, 20px);
+        padding-bottom: clamp(12px, 2vw, 15px);
+    }
+}
+
+@media (max-width: 360px) {
+    .container,
+    .container-header {
+        padding: 0 clamp(8px, 2vw, 12px);
+    }
+
+    .hero-title {
+        font-size: clamp(1rem, 4vw, 1.2rem);
+        letter-spacing: -0.06em;
+    }
+
+    .section-title {
+        font-size: clamp(1rem, 3vw, 1.25rem);
+    }
+
+    .btn-reservar {
+        min-width: clamp(110px, 22vw, 130px);
+        padding: clamp(0.5rem, 0.8vw, 0.6rem) clamp(0.6rem, 1.2vw, 0.8rem);
+        font-size: clamp(0.7rem, 0.9rem, 0.85rem);
+    }
+
+    .nav-link {
+        font-size: clamp(0.65rem, 0.9vw, 0.75rem);
+        padding: clamp(8px, 1.5vw, 10px) clamp(12px, 2vw, 15px);
+    }
+
+    .logo {
+        width: clamp(90px, 18vw, 110px);
+        height: clamp(35px, 4.5vw, 42px);
+    }
+
+    .habitacion-content,
+    .servicio-card,
+    .experiencia-card {
+        padding: clamp(12px, 2.5vw, 15px);
     }
 }
 
