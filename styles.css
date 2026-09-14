@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Cormorant+Garamond:wght@500;600;700&family=Josefin+Sans:wght@600;700&family=Manrope:wght@400;500;600;700;800&display=swap');
 
 * {
     margin: 0;
@@ -41,7 +41,7 @@ body {
 .header {
     background: #060606;
     color: white;
-    padding: 0.7rem 0 0.5rem;
+    padding: 0.35rem 0;
     position: sticky;
     top: 0;
     margin: 0;
@@ -74,8 +74,8 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: clamp(120px, 15vw, 150px);
-    height: clamp(46px, 6vw, 58px);
+    width: clamp(145px, 17vw, 175px);
+    height: clamp(56px, 6vw, 64px);
     flex-shrink: 0;
     overflow: hidden;
 }
@@ -85,6 +85,7 @@ body {
     width: 100%;
     height: 100%;
     object-fit: contain;
+    transform: scale(1.06);
     filter: brightness(1.04) contrast(1.05);
 }
 
@@ -183,10 +184,11 @@ body {
 
 .hero-title {
     display: block;
-    font-size: clamp(1.75rem, 6vw, 5rem);
-    line-height: 0.82;
-    font-weight: 900;
-    letter-spacing: -0.09em;
+    font-family: 'Cinzel', Georgia, serif;
+    font-size: clamp(1.5rem, 4.4vw, 3.7rem);
+    line-height: 1.08;
+    font-weight: 600;
+    letter-spacing: 0.01em;
     margin: 0;
     color: #f3f3f0;
     text-shadow: none;
@@ -235,8 +237,11 @@ body {
     padding: clamp(0.7rem, 1vw, 0.9rem) clamp(1rem, 2vw, 1.4rem);
     border-radius: 0;
     text-decoration: none;
+    font-family: 'Josefin Sans', 'Segoe UI', sans-serif;
     font-weight: 700;
-    font-size: clamp(0.85rem, 1.2vw, 1.1rem);
+    font-size: clamp(0.75rem, 1vw, 0.9rem);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
     text-align: center;
     transition: all 0.3s ease;
     box-shadow: 0 10px 20px rgba(0,0,0,0.12);
@@ -254,17 +259,24 @@ body {
 
 .hero-image-wrap {
     width: 100%;
-    background: #eae4dc;
-    margin-top: 12px;
+    background: transparent;
+    margin-top: 0;
 }
 
 .hero-image {
     width: 100%;
-    max-width: 1400px;
+    max-width: 2000px;
+    aspect-ratio: 1448 / 990;
     margin: 0 auto;
-    min-height: 520px;
-    background: linear-gradient(180deg, rgba(8, 12, 20, 0.18), rgba(8, 12, 20, 0.26)), url('assets/images/hero-bg.png') center/cover no-repeat;
-    border-top: 1px solid rgba(255,255,255,0.08);
+    overflow: hidden;
+}
+
+.hero-image img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center bottom;
 }
 
 .hero-search-wrapper {
@@ -324,7 +336,10 @@ body {
     border: none;
     border-radius: 10px;
     cursor: pointer;
+    font-family: 'Josefin Sans', 'Segoe UI', sans-serif;
     font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
     font-size: 1rem;
     transition: all 0.3s ease;
 }
@@ -339,7 +354,11 @@ body {
     padding: 12px 30px;
     border-radius: 4px;
     text-decoration: none;
-    font-weight: 600;
+    font-family: 'Josefin Sans', 'Segoe UI', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
     transition: all 0.3s ease;
     border: none;
     cursor: pointer;
@@ -373,8 +392,10 @@ section {
 }
 
 .section-title {
+    font-family: 'Cormorant Garamond', Georgia, serif;
     font-size: clamp(1.75rem, 4vw, 2.5rem);
-    font-weight: bold;
+    font-weight: 700;
+    letter-spacing: 0.01em;
     text-align: center;
     margin-bottom: clamp(10px, 2vw, 15px);
     color: var(--text-dark);
@@ -436,9 +457,16 @@ section {
 }
 
 .habitacion-content h3 {
+    font-family: 'Cormorant Garamond', Georgia, serif;
     font-size: clamp(1.25rem, 3vw, 1.5rem);
     margin-bottom: clamp(10px, 2vw, 15px);
     color: var(--text-dark);
+}
+
+.habitacion-descripcion {
+    color: var(--text-light);
+    font-size: 0.95rem;
+    margin-bottom: 15px;
 }
 
 .habitacion-info {
@@ -1293,8 +1321,8 @@ section {
     }
 
     .logo {
-        width: clamp(100px, 20vw, 118px);
-        height: clamp(38px, 5vw, 46px);
+        width: clamp(125px, 25vw, 140px);
+        height: clamp(48px, 6vw, 52px);
     }
 
     .hero {
@@ -1337,7 +1365,7 @@ section {
     }
 
     .hero-image {
-        min-height: clamp(300px, 60vw, 400px);
+        min-height: 0;
     }
 
     .habitacion-card {
@@ -1381,8 +1409,8 @@ section {
     }
 
     .logo {
-        width: clamp(90px, 18vw, 110px);
-        height: clamp(35px, 4.5vw, 42px);
+        width: clamp(110px, 22vw, 125px);
+        height: clamp(42px, 5vw, 48px);
     }
 
     .habitacion-content,
