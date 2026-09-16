@@ -196,6 +196,89 @@ function setupQuickSearch() {
     });
 }
 
+// ── Carruseles de habitaciones ──────────────────────────────────────────────
+
+function setupRoomCarousels() {
+    const base = 'assets/images/Habitaciones/';
+    const roomImages = {
+        'HABITACIÓN DOBLE': ['Habitacion Doble/PORTADA-HAB DOBLE.png', 'Habitacion Doble/PORTADA-HABITACIÓN DOBLE_.png'],
+        'DOUBLE ROOM': ['Habitacion Doble/PORTADA-HAB DOBLE.png', 'Habitacion Doble/PORTADA-HABITACIÓN DOBLE_.png'],
+        'DELUXE KING': ['Deluxe King/PORTADA-DELUXE KING SIZE.png'],
+        'DELUXE DOBLE': ['Deluxe Doble/PORTADA-DELUXE DOBLE.png'],
+        'DELUXE DOUBLE': ['Deluxe Doble/PORTADA-DELUXE DOBLE.png'],
+        'JR. SUITE KING': ['JR. Suite King/PORTADA- JR. KING SIZE.png', 'JR. Suite King/JR. KING SIZE 1.png', 'JR. Suite King/JR. KING SIZE 2.png'],
+        'JR. SUITE DOBLE': ['JR. Suite Doble/PORTADA - JUNIOR SUITE DOBLE.png', 'JR. Suite Doble/Junior_Suite_Doble.png'],
+        'JR. SUITE DOUBLE': ['JR. Suite Doble/PORTADA - JUNIOR SUITE DOBLE.png', 'JR. Suite Doble/Junior_Suite_Doble.png'],
+        'POOL SIDE KING': ['Pool Side King/PORTADA - POOL SIDE_.png', 'Pool Side King/POOL SIDE - TERRAZA.jpg'],
+        'POOL SIDE DOBLE': ['Pool Side Doble/PORTADA - POOL SIDE DOBLE.png', 'Pool Side Doble/TERRAZA POOL SIDE.png'],
+        'POOL SIDE DOUBLE': ['Pool Side Doble/PORTADA - POOL SIDE DOBLE.png', 'Pool Side Doble/TERRAZA POOL SIDE.png'],
+        'MASTER SUITE': ['Master Suite/PORTADA - MASTER SUITE.jpg', 'Master Suite/ENTRADA MASTER SUITE.png', 'Master Suite/MASTER SUITE CAMA KING.png']
+    };
+
+    document.querySelectorAll('.habitacion-card').forEach(card => {
+        const title = card.querySelector('h3')?.textContent.trim().toUpperCase();
+        const images = roomImages[title];
+        const container = card.querySelector('.habitacion-image');
+        if (!images || !container) return;
+
+        const badge = container.querySelector('.habitacion-badge');
+        const carousel = document.createElement('div');
+        carousel.className = 'room-carousel';
+        carousel.setAttribute('aria-label', isEn ? `${title} photo gallery` : `Galería de ${title}`);
+        const track = document.createElement('div');
+        track.className = 'room-carousel-track';
+        const slides = images.map((path, index) => {
+            const image = document.createElement('img');
+            image.className = `room-carousel-slide${index === 0 ? ' is-active' : ''}`;
+            image.src = encodeURI(base + path);
+            image.alt = `${title} — ${index + 1}`;
+            track.appendChild(image);
+            return image;
+        });
+        carousel.appendChild(track);
+        container.replaceChildren(carousel, badge);
+
+        if (slides.length === 1) return;
+        let current = 0;
+        let autoAdvance;
+        const dots = document.createElement('div');
+        dots.className = 'room-carousel-dots';
+        const show = index => {
+            current = (index + slides.length) % slides.length;
+            slides.forEach((slide, i) => slide.classList.toggle('is-active', i === current));
+            dots.querySelectorAll('button').forEach((dot, i) => dot.classList.toggle('is-active', i === current));
+        };
+        [['prev', '‹', -1], ['next', '›', 1]].forEach(([direction, symbol, change]) => {
+            const button = document.createElement('button');
+            button.className = `room-carousel-control room-carousel-${direction}`;
+            button.type = 'button';
+            button.setAttribute('aria-label', isEn ? `${direction} photo` : `Foto ${direction === 'prev' ? 'anterior' : 'siguiente'}`);
+            button.textContent = symbol;
+            button.addEventListener('click', event => { event.stopPropagation(); show(current + change); });
+            carousel.appendChild(button);
+        });
+        slides.forEach((_, index) => {
+            const dot = document.createElement('button');
+            dot.className = `room-carousel-dot${index === 0 ? ' is-active' : ''}`;
+            dot.type = 'button';
+            dot.setAttribute('aria-label', `${isEn ? 'Show photo' : 'Mostrar foto'} ${index + 1}`);
+            dot.addEventListener('click', event => { event.stopPropagation(); show(index); });
+            dots.appendChild(dot);
+        });
+        carousel.appendChild(dots);
+
+        const startAutoAdvance = () => {
+            autoAdvance = window.setInterval(() => show(current + 1), 5000);
+        };
+        const stopAutoAdvance = () => window.clearInterval(autoAdvance);
+        carousel.addEventListener('mouseenter', stopAutoAdvance);
+        carousel.addEventListener('mouseleave', startAutoAdvance);
+        carousel.addEventListener('focusin', stopAutoAdvance);
+        carousel.addEventListener('focusout', startAutoAdvance);
+        startAutoAdvance();
+    });
+}
+
 // ── Animaciones de scroll ─────────────────────────────────────────────────────
 
 function setupScrollAnimations() {
@@ -251,6 +334,7 @@ document.addEventListener('DOMContentLoaded', function () {
     setupNavigation();
     setupFormHandling();
     setupQuickSearch();
+    setupRoomCarousels();
     setupScrollAnimations();
     setupAnchorLinks();
     setupHeaderShadow();
