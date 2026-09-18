@@ -111,6 +111,54 @@ body {
     padding: 0;
 }
 
+/* ================================
+   CINTILLO EN MOVIMIENTO
+   ================================ */
+
+.cintillo {
+    width: 100%;
+    overflow: hidden;
+    margin-top: 25px;
+}
+
+.cintillo-contenido {
+    display: flex;
+    align-items: center;
+    width: max-content;
+    animation: moverCintillo 15s linear infinite;
+    animation-play-state:running !important;
+}
+
+.cintillo-contenido img {
+    width: 75px;
+    height: 75px;
+    object-fit: contain;
+    margin-right: 15px;
+    flex-shrink: 0;
+}
+
+.texto {
+    white-space: nowrap;
+    font-family: 'Averia Sans Libre', 'Segoe UI', sans-serif;
+    font-size: 25px;
+    font-weight: 500;
+    color: #ffffff;
+}
+
+@keyframes moverCintillo {
+    from {
+        transform: translateX(100%);
+    }
+
+    to {
+        transform: translateX(-100%);
+    }
+}
+
+.cintillo:hover .cintillo-contenido {
+    animation: marquee linear infinite;
+}
+
 .nav-link {
     font-family: 'Averia Sans Libre', 'Segoe UI', sans-serif;
     font-weight: 700;
@@ -174,21 +222,22 @@ body {
     align-items: flex-start;
     max-width: 1400px;
     margin: 0 auto;
-    padding: clamp(20px, 4vw, 28px) clamp(8px, 2.5vw, 14px) 0;
     position: relative;
     z-index: 3;
 }
 
 .brand-block {
     display: flex;
-    align-items: center;
+    flex-direction: column;
     justify-content: flex-start;
+    align-items:flex-start;
+    width: 100%;
 }
 
 .hero-title {
     display: block;
     font-family: 'Cinzel', Georgia, serif;
-    font-size: clamp(1.5rem, 4.4vw, 3.7rem);
+    font-size: clamp(2.5rem, 3.6vw, 3.2rem);
     line-height: 1.08;
     font-weight: 600;
     letter-spacing: 0.01em;

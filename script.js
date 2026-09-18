@@ -195,6 +195,161 @@ function setupQuickSearch() {
         }, 500);
     });
 }
+// ── Carrusel de Recepción ──────────────────────────────────────────────
+
+function setupReceptionCarousel() {
+
+    const base = 'assets/images/Galeria/Recepción/';
+
+    const receptionImages = [
+        'lobby 1.png',
+        'lobby 2.png',
+        'recepcion.png' 
+    ];
+
+    const container = document.querySelector(
+        '.galeria-image[data-galeria="recepcion"]'
+    );
+
+    if (!container || receptionImages.length === 0) return;
+
+    const originalText = container.querySelector('span');
+
+    const carousel = document.createElement('div');
+    carousel.className = 'room-carousel';
+
+    carousel.setAttribute(
+        'aria-label',
+        isEn ? 'Reception photo gallery' : 'Galería de recepción'
+    );
+
+    const track = document.createElement('div');
+    track.className = 'room-carousel-track';
+
+    const slides = receptionImages.map((path, index) => {
+
+        const image = document.createElement('img');
+
+        image.className =
+            `room-carousel-slide${index === 0 ? ' is-active' : ''}`;
+
+        image.src = encodeURI(base + path);
+
+        image.alt = `LOBBY — ${index + 1}`;
+
+        track.appendChild(image);
+
+        return image;
+    });
+
+    carousel.appendChild(track);
+
+    if (originalText) {
+        carousel.appendChild(originalText);
+    }
+
+    container.replaceChildren(carousel);
+
+    if (slides.length === 1) return;
+
+    let current = 0;
+    let autoAdvance;
+
+    const dots = document.createElement('div');
+    dots.className = 'room-carousel-dots';
+
+    const show = index => {
+
+        current = (index + slides.length) % slides.length;
+
+        slides.forEach((slide, i) => {
+            slide.classList.toggle(
+                'is-active',
+                i === current
+            );
+        });
+
+        dots.querySelectorAll('button').forEach((dot, i) => {
+            dot.classList.toggle(
+                'is-active',
+                i === current
+            );
+        });
+    };
+
+    [
+        ['prev', '‹', -1],
+        ['next', '›', 1]
+    ].forEach(([direction, symbol, change]) => {
+
+        const button = document.createElement('button');
+
+        button.className =
+            `room-carousel-control room-carousel-${direction}`;
+
+        button.type = 'button';
+
+        button.setAttribute(
+            'aria-label',
+            isEn
+                ? `${direction} photo`
+                : `Foto ${direction === 'prev' ? 'anterior' : 'siguiente'}`
+        );
+
+        button.textContent = symbol;
+
+        button.addEventListener('click', event => {
+            event.stopPropagation();
+            show(current + change);
+        });
+
+        carousel.appendChild(button);
+    });
+
+    slides.forEach((_, index) => {
+
+        const dot = document.createElement('button');
+
+        dot.className =
+            `room-carousel-dot${index === 0 ? ' is-active' : ''}`;
+
+        dot.type = 'button';
+
+        dot.setAttribute(
+            'aria-label',
+            `${isEn ? 'Show photo' : 'Mostrar foto'} ${index + 1}`
+        );
+
+        dot.addEventListener('click', event => {
+            event.stopPropagation();
+            show(index);
+        });
+
+        dots.appendChild(dot);
+    });
+
+    carousel.appendChild(dots);
+
+    const startAutoAdvance = () => {
+
+        autoAdvance = window.setInterval(() => {
+            show(current + 1);
+        }, 5000);
+
+    };
+
+    const stopAutoAdvance = () => {
+        window.clearInterval(autoAdvance);
+    };
+
+    carousel.addEventListener('mouseenter', stopAutoAdvance);
+    carousel.addEventListener('mouseleave', startAutoAdvance);
+
+    carousel.addEventListener('focusin', stopAutoAdvance);
+    carousel.addEventListener('focusout', startAutoAdvance);
+
+    startAutoAdvance();
+} 
 
 // ── Carruseles de habitaciones ──────────────────────────────────────────────
 
@@ -338,6 +493,7 @@ document.addEventListener('DOMContentLoaded', function () {
     setupScrollAnimations();
     setupAnchorLinks();
     setupHeaderShadow();
+    setupReceptionCarousel();
 });
 
 console.log('Hotel Nacional David — Sitio web cargado correctamente');
