@@ -349,10 +349,26 @@
                     <ul class="restaurante-list">
                         <li><i class="fas fa-utensils"></i> Desayuno en la cafeteia desde las 6:30 AM a 10:30 AM</li>
                         <li><i class="fas fa-utensils"></i> Almuerzo Buffet desde 12:00 MD a 2:30 PM</li>
-                        <li><i class="fas fa-utensils"></i> Restaurante Pizzería - Italiano de 11:00 AM a 10:00 PM</li>
-                        <li><i class="fas fa-utensils"></i> Restaurante Bohío Barbacoa desde las 4:30 PM a 10:00 PM.</li>
                     </ul>
                 </div>
+            </div>
+            <div class="restaurante-listado">
+                <article class="restaurante-bloque">
+                    <div class="restaurante-bloque-info">
+                        <h3>Restaurante Bohío Barbacoa</h3>
+                        <p>Disfruta de una experiencia relajada con sabores a la parrilla y un ambiente acogedor.</p>
+                        <p class="restaurante-horario"><strong>Horario:</strong> 4:30 PM a 10:00 PM</p>
+                    </div>
+                    <div class="restaurante-carousel" data-restaurante="bohio" aria-label="Galería del Restaurante Bohío Barbacoa"></div>
+                </article>
+                <article class="restaurante-bloque">
+                    <div class="restaurante-bloque-info">
+                        <h3>Restaurante Italiano / Pizzería</h3>
+                        <p>Una propuesta italiana con pizzas y platos preparados para disfrutar en familia o con amigos.</p>
+                        <p class="restaurante-horario"><strong>Horario:</strong> 11:00 AM a 10:00 PM</p>
+                    </div>
+                    <div class="restaurante-carousel" data-restaurante="italiano" aria-label="Galería del Restaurante Italiano y Pizzería"></div>
+                </article>
             </div>
         </div>
     </section>
@@ -539,6 +555,59 @@
                     <div class="form-group">
                         <label data-i18n="reservation.phone">Teléfono / WhatsApp</label>
                         <input type="tel" name="telefono" required>
+                    </div>
+                </div>
+                <div class="form-row payment-row">
+                    <div class="form-group">
+                        <label data-i18n="reservation.cardType">Tipo de Tarjeta</label>
+                        <select name="tipoTarjeta" required>
+                            <option value="" data-i18n="reservation.selectCard">Selecciona Visa o Mastercard</option>
+                            <option value="visa">Visa</option>
+                            <option value="mastercard">Mastercard</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label data-i18n="reservation.cardNumber">Número completo de la tarjeta</label>
+                        <input type="text" name="numeroTarjeta" inputmode="numeric" autocomplete="off"
+                            minlength="13" maxlength="23" pattern="[0-9 ]{13,23}"
+                            placeholder="1234 5678 9012 3456" data-i18n-placeholder="reservation.cardNumberPlaceholder" required>
+                    </div>
+                    <div class="form-group">
+                        <label data-i18n="reservation.expiryMonth">Mes de vencimiento</label>
+                        <select name="mesVencimiento" autocomplete="off" required>
+                            <option value="" data-i18n="reservation.selectMonth">Mes</option>
+                            <option value="01">01</option>
+                            <option value="02">02</option>
+                            <option value="03">03</option>
+                            <option value="04">04</option>
+                            <option value="05">05</option>
+                            <option value="06">06</option>
+                            <option value="07">07</option>
+                            <option value="08">08</option>
+                            <option value="09">09</option>
+                            <option value="10">10</option>
+                            <option value="11">11</option>
+                            <option value="12">12</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label data-i18n="reservation.expiryYear">Año de vencimiento</label>
+                        <select name="anioVencimiento" autocomplete="off" required>
+                            <option value="" data-i18n="reservation.selectYear">Año</option>
+                            <option value="2026">2026</option>
+                            <option value="2027">2027</option>
+                            <option value="2028">2028</option>
+                            <option value="2029">2029</option>
+                            <option value="2030">2030</option>
+                            <option value="2031">2031</option>
+                            <option value="2032">2032</option>
+                            <option value="2033">2033</option>
+                            <option value="2034">2034</option>
+                            <option value="2035">2035</option>
+                            <option value="2036">2036</option>
+                            <option value="2037">2037</option>
+                            <option value="2038">2038</option>
+                        </select>
                     </div>
                 </div>
                 <div class="form-row">

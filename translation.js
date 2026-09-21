@@ -42,6 +42,14 @@ const translations = {
             fullName: 'Nombre Completo',
             email: 'Email',
             phone: 'Teléfono / WhatsApp',
+            cardType: 'Tipo de Tarjeta',
+            selectCard: 'Selecciona Visa o Mastercard',
+            cardNumber: 'Número completo de la tarjeta',
+            cardNumberPlaceholder: '1234 5678 9012 3456',
+            expiryMonth: 'Mes de vencimiento',
+            selectMonth: 'Mes',
+            expiryYear: 'Año de vencimiento',
+            selectYear: 'Año',
             message: 'Mensaje o Solicitudes Especiales',
             messagePlaceholder: 'Cuéntanos sobre tus necesidades especiales...',
             submit: 'Realizar Reserva'
@@ -106,6 +114,14 @@ const translations = {
             fullName: 'Full Name',
             email: 'Email',
             phone: 'Phone / WhatsApp',
+            cardType: 'Card Type',
+            selectCard: 'Select Visa or Mastercard',
+            cardNumber: 'Full card number',
+            cardNumberPlaceholder: '1234 5678 9012 3456',
+            expiryMonth: 'Expiration month',
+            selectMonth: 'Month',
+            expiryYear: 'Expiration year',
+            selectYear: 'Year',
             message: 'Message or Special Requests',
             messagePlaceholder: 'Tell us about your special needs...',
             submit: 'Make Reservation'
@@ -255,6 +271,21 @@ const pageTranslations = {
             title: 'Our Restaurant',
             subtitle: 'Indulge in our exquisite culinary options',
             heading: 'Gastronomic Experience',
+            imageAlt: 'Bohío Barbecue Restaurant',
+            venues: [
+                {
+                    name: 'Bohío Barbecue Restaurant',
+                    description: 'Enjoy a relaxed experience with grilled flavors and a welcoming atmosphere.',
+                    hours: 'Hours: 4:30 PM to 10:00 PM',
+                    galleryLabel: 'Bohío Barbecue Restaurant gallery'
+                },
+                {
+                    name: 'Italian Restaurant / Pizzeria',
+                    description: 'An Italian offering with pizzas and dishes prepared to enjoy with family or friends.',
+                    hours: 'Hours: 11:00 AM to 10:00 PM',
+                    galleryLabel: 'Italian Restaurant and Pizzeria gallery'
+                }
+            ],
             description: 'Our restaurant offers a varied selection of dishes combining the best international cuisine with the typical flavors of the region.',
             schedule: ['Breakfast at the cafeteria from 6:30 AM to 10:30 AM', 'Buffet lunch from 12:00 PM to 2:30 PM', 'Italian pizzeria restaurant from 11:00 AM to 10:00 PM', 'Bohío Barbecue Restaurant from 4:30 PM to 10:00 PM.']
         },
@@ -377,6 +408,16 @@ function applyPageTranslations(language) {
     setText('#restaurante .restaurante-info > p', content.restaurant.description);
     document.querySelectorAll('#restaurante .restaurante-list li').forEach((item, index) => {
         if (content.restaurant.schedule[index]) setIconText(item, content.restaurant.schedule[index]);
+    });
+    document.querySelectorAll('.restaurante-bloque').forEach((block, index) => {
+        const venue = content.restaurant.venues[index];
+        if (!venue) return;
+        block.querySelector('.restaurante-bloque-info h3').textContent = venue.name;
+        block.querySelector('.restaurante-bloque-info p').textContent = venue.description;
+        const hours = block.querySelector('.restaurante-horario');
+        if (hours) hours.textContent = venue.hours;
+        const carousel = block.querySelector('.restaurante-carousel');
+        if (carousel) carousel.setAttribute('aria-label', venue.galleryLabel);
     });
 
     const roomOptions = document.querySelectorAll('select[name="habitacion"] option');

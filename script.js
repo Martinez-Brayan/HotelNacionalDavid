@@ -112,17 +112,36 @@ function setupFormHandling() {
         });
     }
 
+    setupCardNumberFormatting();
     setupDateInputs();
+}
+
+function setupCardNumberFormatting() {
+    const cardNumberInput = document.querySelector('input[name="numeroTarjeta"]');
+    if (!cardNumberInput) return;
+
+    cardNumberInput.addEventListener('input', function () {
+        const digits = this.value.replace(/\D/g, '').slice(0, 19);
+        this.value = digits.replace(/(.{4})/g, '$1 ').trim();
+    });
 }
 
 function handleReservationSubmit(form) {
     const formData = new FormData(form);
     const data = Object.fromEntries(formData);
 
-    if (!data.habitacion || !data.nombre || !data.email || !data.telefono || !data.checkin || !data.checkout) {
+    if (!data.habitacion || !data.nombre || !data.email || !data.telefono || !data.checkin || !data.checkout || !data.tipoTarjeta || !data.numeroTarjeta || !data.mesVencimiento || !data.anioVencimiento) {
         alert(isEn
-            ? 'Please complete all required fields.'
-            : 'Por favor completa todos los campos requeridos.');
+            ? 'Please complete all required fields, including the card information.'
+            : 'Por favor completa todos los campos requeridos, incluyendo los datos de la tarjeta.');
+        return;
+    }
+
+    const cardNumber = data.numeroTarjeta.replace(/\s+/g, '');
+    if (!/^\d{13,19}$/.test(cardNumber)) {
+        alert(isEn
+            ? 'Enter the complete card number using 13 to 19 digits.'
+            : 'Ingresa la numeración completa de la tarjeta usando entre 13 y 19 dígitos.');
         return;
     }
 
@@ -205,7 +224,16 @@ function setupGalleryCarousels() {
             'assets/images/Galeria/Recepcion/recepcion.png'
         ],
         habitaciones: [],
-        restaurante: [],
+        restaurante: [
+            'assets/images/Galeria/Restaurante/portada_bohio.png',
+            'assets/images/Galeria/Restaurante/restaurante_bohio.png',
+            'assets/images/Galeria/Restaurante/restaurante_bohio2.png',
+            'assets/images/Galeria/Restaurante/italiano_exterior.png',
+            'assets/images/Galeria/Restaurante/italiano_terraza.png',
+            'assets/images/Galeria/Restaurante/restaurante_italiano1.png',
+            'assets/images/Galeria/Restaurante/restaurante_italiano2.png',
+            'assets/images/Galeria/Restaurante/restaurante_italiano3.jpeg'
+        ],
         piscina: [
             'assets/images/Galeria/Piscina/piscina1.png',
             'assets/images/Galeria/Piscina/piscina2.png',
@@ -216,7 +244,9 @@ function setupGalleryCarousels() {
         eventos: [],
         gimnasio: [
             'assets/images/Galeria/Gimnasio/gimnasio1.png',
-            'assets/images/Galeria/Gimnasio/gimnasio2.png'
+            'assets/images/Galeria/Gimnasio/gimnasio2.png',
+            'assets/images/Galeria/Gimnasio/gimnasio3.png',
+            'assets/images/Galeria/Gimnasio/gimnasio4.png'
         ]
     };
 
@@ -303,6 +333,69 @@ function setupGalleryCarousels() {
         carousel.addEventListener('focusout', startAutoAdvance);
 
         startAutoAdvance();
+    });
+}
+
+function setupRestaurantCarousels() {
+    const restaurantImages = {
+        bohio: [
+            'assets/images/Galeria/Restaurante/portada_bohio.png',
+            'assets/images/Galeria/Restaurante/restaurante_bohio.png',
+            'assets/images/Galeria/Restaurante/restaurante_bohio2.png'
+        ],
+        italiano: [
+            'assets/images/Galeria/Restaurante/italiano_exterior.png',
+            'assets/images/Galeria/Restaurante/italiano_terraza.png',
+            'assets/images/Galeria/Restaurante/restaurante_italiano1.png',
+            'assets/images/Galeria/Restaurante/restaurante_italiano2.png',
+            'assets/images/Galeria/Restaurante/restaurante_italiano3.jpeg'
+        ]
+    };
+
+    document.querySelectorAll('.restaurante-carousel').forEach(container => {
+        const images = restaurantImages[container.dataset.restaurante] || [];
+        if (!images.length) return;
+
+        const track = document.createElement('div');
+        track.className = 'room-carousel-track';
+        const slides = images.map((path, index) => {
+            const image = document.createElement('img');
+            image.className = `room-carousel-slide${index === 0 ? ' is-active' : ''}`;
+            image.src = encodeURI(path);
+            image.alt = `${container.dataset.restaurante} restaurant — ${index + 1}`;
+            track.appendChild(image);
+            return image;
+        });
+        container.appendChild(track);
+
+        let current = 0;
+        const show = index => {
+            current = (index + slides.length) % slides.length;
+            slides.forEach((slide, slideIndex) => slide.classList.toggle('is-active', slideIndex === current));
+            container.querySelectorAll('.restaurante-dot').forEach((dot, dotIndex) => dot.classList.toggle('is-active', dotIndex === current));
+        };
+
+        [['prev', '‹', -1], ['next', '›', 1]].forEach(([direction, symbol, change]) => {
+            const button = document.createElement('button');
+            button.className = `room-carousel-control room-carousel-${direction}`;
+            button.type = 'button';
+            button.setAttribute('aria-label', isEn ? `${direction} restaurant photo` : `Foto ${direction === 'prev' ? 'anterior' : 'siguiente'} del restaurante`);
+            button.textContent = symbol;
+            button.addEventListener('click', () => show(current + change));
+            container.appendChild(button);
+        });
+
+        const dots = document.createElement('div');
+        dots.className = 'room-carousel-dots';
+        slides.forEach((_, index) => {
+            const dot = document.createElement('button');
+            dot.className = `room-carousel-dot restaurante-dot${index === 0 ? ' is-active' : ''}`;
+            dot.type = 'button';
+            dot.setAttribute('aria-label', `${isEn ? 'Show restaurant photo' : 'Mostrar foto del restaurante'} ${index + 1}`);
+            dot.addEventListener('click', () => show(index));
+            dots.appendChild(dot);
+        });
+        container.appendChild(dots);
     });
 }
 
@@ -467,9 +560,9 @@ function setupReceptionCarousel() {
 function setupRoomCarousels() {
     const base = 'assets/images/Habitaciones/';
     const roomImages = {
-        'HABITACIÓN DOBLE': ['Habitacion Doble/PORTADA-HAB DOBLE.png', 'Habitacion Doble/PORTADA-HABITACIÓN DOBLE_.png'],
-        'DOUBLE ROOM': ['Habitacion Doble/PORTADA-HAB DOBLE.png', 'Habitacion Doble/PORTADA-HABITACIÓN DOBLE_.png'],
-        'DELUXE KING': ['Deluxe King/PORTADA-DELUXE KING SIZE.png'],
+        'HABITACIÓN DOBLE': ['Habitacion Doble/PORTADA-HAB DOBLE.png', 'Habitacion Doble/PORTADA-HABITACIÓN DOBLE_.png', 'Habitacion Doble/hab.doble.png', 'Habitacion Doble/habitacion_doble2.png'],
+        'DOUBLE ROOM': ['Habitacion Doble/PORTADA-HAB DOBLE.png', 'Habitacion Doble/PORTADA-HABITACIÓN DOBLE_.png', 'Habitacion Doble/hab.doble.png', 'Habitacion Doble/habitacion_doble2.png'],
+        'DELUXE KING': ['Deluxe King/DELUXE KING.png', 'Deluxe King/portada_DKing.png'],
         'DELUXE DOBLE': ['Deluxe Doble/PORTADA-DELUXE DOBLE.png'],
         'DELUXE DOUBLE': ['Deluxe Doble/PORTADA-DELUXE DOBLE.png'],
         'JR. SUITE KING': ['JR. Suite King/PORTADA- JR. KING SIZE.png', 'JR. Suite King/JR. KING SIZE 1.png', 'JR. Suite King/JR. KING SIZE 2.png'],
@@ -602,6 +695,7 @@ document.addEventListener('DOMContentLoaded', function () {
     setupQuickSearch();
     setupRoomCarousels();
     setupGalleryCarousels();
+    setupRestaurantCarousels();
     setupScrollAnimations();
     setupAnchorLinks();
     setupHeaderShadow();
