@@ -1443,11 +1443,35 @@ section {
 
 @media (max-width: 768px) {
     .container-header {
-        flex-wrap: wrap;
+        flex-wrap: nowrap;
+        gap: 6px;
+    }
+
+    .brand-lockup {
+        margin-left: 0;
+        margin-right: auto;
+    }
+
+    .logo {
+        width: 78px;
+        height: 58px;
     }
 
     .header-actions {
-        margin-left: auto;
+        margin-left: 0;
+        gap: 6px;
+    }
+
+    .lang-btn {
+        width: 38px;
+        height: 38px;
+        font-size: 0.78rem;
+    }
+
+    .btn-reservar {
+        min-width: 104px;
+        padding: 0.7rem 0.65rem;
+        font-size: 0.72rem;
     }
 
     .hamburger {
@@ -1636,8 +1660,20 @@ section {
     }
 
     .logo {
-        width: clamp(110px, 22vw, 125px);
-        height: clamp(42px, 5vw, 48px);
+        width: 70px;
+        height: 54px;
+    }
+
+    .lang-btn {
+        width: 34px;
+        height: 36px;
+    }
+
+    .btn-reservar {
+        min-width: 92px;
+        padding-left: 0.45rem;
+        padding-right: 0.45rem;
+        font-size: 0.66rem;
     }
 
     .habitacion-content,

@@ -4,6 +4,31 @@ const requestedLanguage = new URLSearchParams(window.location.search).get('lang'
 const pageLang = requestedLanguage || document.documentElement.lang || 'es';
 const isEn = pageLang === 'en';
 
+function loadCarouselSlide(slide) {
+    if (!slide || slide.src || !slide.dataset.src) return;
+    slide.src = slide.dataset.src;
+    slide.removeAttribute('data-src');
+}
+
+function watchCarouselLoading(container, slides) {
+    const loadInitialSlides = () => {
+        loadCarouselSlide(slides[0]);
+        loadCarouselSlide(slides[1]);
+    };
+
+    if (!('IntersectionObserver' in window)) {
+        loadInitialSlides();
+        return;
+    }
+
+    const observer = new IntersectionObserver(entries => {
+        if (!entries.some(entry => entry.isIntersecting)) return;
+        loadInitialSlides();
+        observer.disconnect();
+    }, { rootMargin: '300px 0px' });
+    observer.observe(container);
+}
+
 // ── Navegación ────────────────────────────────────────────────────────────────
 
 function setupNavigation() {
@@ -113,7 +138,24 @@ function setupFormHandling() {
     }
 
     setupCardNumberFormatting();
+    setupExpiryYearOptions();
     setupDateInputs();
+}
+
+function setupExpiryYearOptions() {
+    const expiryYearSelect = document.querySelector('select[name="anioVencimiento"]');
+    if (!expiryYearSelect) return;
+
+    const placeholder = expiryYearSelect.querySelector('option[value=""]');
+    expiryYearSelect.replaceChildren(placeholder);
+
+    const currentYear = new Date().getFullYear();
+    for (let year = currentYear; year <= currentYear + 15; year += 1) {
+        const option = document.createElement('option');
+        option.value = String(year);
+        option.textContent = String(year);
+        expiryYearSelect.appendChild(option);
+    }
 }
 
 function setupCardNumberFormatting() {
@@ -273,7 +315,9 @@ function setupGalleryCarousels() {
         const slides = images.map((path, index) => {
             const image = document.createElement('img');
             image.className = `room-carousel-slide${index === 0 ? ' is-active' : ''}`;
-            image.src = encodeURI(path);
+            const source = encodeURI(path);
+            image.dataset.src = source;
+            image.loading = 'lazy';
             image.alt = `${key} — ${index + 1}`;
             track.appendChild(image);
             return image;
@@ -281,6 +325,7 @@ function setupGalleryCarousels() {
 
         carousel.appendChild(track);
         container.replaceChildren(carousel);
+        watchCarouselLoading(carousel, slides);
 
         if (slides.length <= 1) return;
 
@@ -291,6 +336,8 @@ function setupGalleryCarousels() {
 
         const show = index => {
             current = (index + slides.length) % slides.length;
+            loadCarouselSlide(slides[current]);
+            loadCarouselSlide(slides[(current + 1) % slides.length]);
             slides.forEach((slide, i) => slide.classList.toggle('is-active', i === current));
             dots.querySelectorAll('button').forEach((dot, i) => dot.classList.toggle('is-active', i === current));
         };
@@ -361,16 +408,21 @@ function setupRestaurantCarousels() {
         const slides = images.map((path, index) => {
             const image = document.createElement('img');
             image.className = `room-carousel-slide${index === 0 ? ' is-active' : ''}`;
-            image.src = encodeURI(path);
+            const source = encodeURI(path);
+            image.dataset.src = source;
+            image.loading = 'lazy';
             image.alt = `${container.dataset.restaurante} restaurant — ${index + 1}`;
             track.appendChild(image);
             return image;
         });
         container.appendChild(track);
+        watchCarouselLoading(container, slides);
 
         let current = 0;
         const show = index => {
             current = (index + slides.length) % slides.length;
+            loadCarouselSlide(slides[current]);
+            loadCarouselSlide(slides[(current + 1) % slides.length]);
             slides.forEach((slide, slideIndex) => slide.classList.toggle('is-active', slideIndex === current));
             container.querySelectorAll('.restaurante-dot').forEach((dot, dotIndex) => dot.classList.toggle('is-active', dotIndex === current));
         };
@@ -589,13 +641,16 @@ function setupRoomCarousels() {
         const slides = images.map((path, index) => {
             const image = document.createElement('img');
             image.className = `room-carousel-slide${index === 0 ? ' is-active' : ''}`;
-            image.src = encodeURI(base + path);
+            const source = encodeURI(base + path);
+            image.dataset.src = source;
+            image.loading = 'lazy';
             image.alt = `${title} — ${index + 1}`;
             track.appendChild(image);
             return image;
         });
         carousel.appendChild(track);
         container.replaceChildren(carousel, badge);
+        watchCarouselLoading(carousel, slides);
 
         if (slides.length === 1) return;
         let current = 0;
@@ -604,6 +659,8 @@ function setupRoomCarousels() {
         dots.className = 'room-carousel-dots';
         const show = index => {
             current = (index + slides.length) % slides.length;
+            loadCarouselSlide(slides[current]);
+            loadCarouselSlide(slides[(current + 1) % slides.length]);
             slides.forEach((slide, i) => slide.classList.toggle('is-active', i === current));
             dots.querySelectorAll('button').forEach((dot, i) => dot.classList.toggle('is-active', i === current));
         };
