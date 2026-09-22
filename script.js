@@ -395,7 +395,8 @@ function setupRestaurantCarousels() {
             'assets/images/Galeria/Restaurante/italiano_terraza.png',
             'assets/images/Galeria/Restaurante/restaurante_italiano1.png',
             'assets/images/Galeria/Restaurante/restaurante_italiano2.png',
-            'assets/images/Galeria/Restaurante/restaurante_italiano3.jpeg'
+            'assets/images/Galeria/Restaurante/restaurante_italiano3.jpeg',
+            'assets/images/Galeria/Restaurante/restaurante_italiano4.png'
         ]
     };
 
