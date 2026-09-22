@@ -265,6 +265,12 @@ function setupGalleryCarousels() {
             'assets/images/Galeria/Recepcion/lobby 2.png',
             'assets/images/Galeria/Recepcion/recepcion.png'
         ],
+        eventos: [
+            'assets/images/Galeria/Eventos/eventos1.png',
+            'assets/images/Galeria/Eventos/eventos2.png',
+            'assets/images/Galeria/Eventos/eventos3.png',
+            'assets/images/Galeria/Eventos/eventos4.png'
+        ],
         habitaciones: [],
         restaurante: [
             'assets/images/Galeria/Restaurante/portada_bohio.png',
@@ -283,7 +289,12 @@ function setupGalleryCarousels() {
             'assets/images/Galeria/Piscina/piscina4.png'
         ],
         jardines: [],
-        eventos: [],
+        eventos: [
+            'assets/images/Galeria/Eventos/eventos1.png',
+            'assets/images/Galeria/Eventos/eventos2.png',
+            'assets/images/Galeria/Eventos/eventos3.png',
+            'assets/images/Galeria/Eventos/eventos4.png'
+        ],
         gimnasio: [
             'assets/images/Galeria/Gimnasio/gimnasio1.png',
             'assets/images/Galeria/Gimnasio/gimnasio2.png',
