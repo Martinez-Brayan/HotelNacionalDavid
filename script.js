@@ -293,7 +293,9 @@ function setupGalleryCarousels() {
             'assets/images/Galeria/Eventos/eventos1.png',
             'assets/images/Galeria/Eventos/eventos2.png',
             'assets/images/Galeria/Eventos/eventos3.png',
-            'assets/images/Galeria/Eventos/eventos4.png'
+            'assets/images/Galeria/Eventos/eventos4.png',
+            'assets/images/Galeria/Eventos/eventos5.png',
+            'assets/images/Galeria/Eventos/eventos6.png'
         ],
         gimnasio: [
             'assets/images/Galeria/Gimnasio/gimnasio1.png',
