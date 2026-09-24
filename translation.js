@@ -32,6 +32,9 @@ const translations = {
             title: 'Galería',
             subtitle: 'Conoce nuestras instalaciones'
         },
+        location: {
+            openMap: 'Abrir en Google Maps'
+        },
         reservation: {
             title: 'Formulario de Reserva',
             room: 'Tipo de Habitación',
@@ -103,6 +106,9 @@ const translations = {
         gallery: {
             title: 'Gallery',
             subtitle: 'Discover our facilities'
+        },
+        location: {
+            openMap: 'Open in Google Maps'
         },
         reservation: {
             title: 'Booking Form',

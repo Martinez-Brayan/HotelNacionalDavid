@@ -5,7 +5,7 @@ const pageLang = requestedLanguage || document.documentElement.lang || 'es';
 const isEn = pageLang === 'en';
 
 function loadCarouselSlide(slide) {
-    if (!slide || slide.src || !slide.dataset.src) return;
+    if (!slide || !slide.dataset.src) return;
     slide.src = slide.dataset.src;
     slide.removeAttribute('data-src');
 }
@@ -265,13 +265,28 @@ function setupGalleryCarousels() {
             'assets/images/Galeria/Recepcion/lobby 2.png',
             'assets/images/Galeria/Recepcion/recepcion.png'
         ],
-        eventos: [
-            'assets/images/Galeria/Eventos/eventos1.png',
-            'assets/images/Galeria/Eventos/eventos2.png',
-            'assets/images/Galeria/Eventos/eventos3.png',
-            'assets/images/Galeria/Eventos/eventos4.png'
+        habitaciones: [
+            'assets/images/Habitaciones/Habitacion Doble/PORTADA-HAB DOBLE.png',
+            'assets/images/Habitaciones/Habitacion Doble/PORTADA-HABITACIÓN DOBLE .png',
+            'assets/images/Habitaciones/Habitacion Doble/HAB (1). DOBLE.png',
+            'assets/images/Habitaciones/Habitacion Doble/HAB (2). DOBLE.png',
+            'assets/images/Habitaciones/Deluxe King/DELUXE KING (1).png',
+            'assets/images/Habitaciones/Deluxe King/PORTADA-DELUXE KING SIZE (1).png',
+            'assets/images/Habitaciones/Deluxe Doble/PORTADA-DELUXE DOBLE.png',
+            'assets/images/Habitaciones/JR. Suite King/PORTADA- JR. KING SIZE.png',
+            'assets/images/Habitaciones/JR. Suite King/JR. KING SIZE 1.png',
+            'assets/images/Habitaciones/JR. Suite King/JR. KING SIZE 2.png',
+            'assets/images/Habitaciones/JR. Suite Doble/PORTADA - JUNIOR SUITE DOBLE.png',
+            'assets/images/Habitaciones/JR. Suite Doble/JUNIOR SUITE DOBLE (1).png',
+            'assets/images/Habitaciones/Pool Side King/PORTADA - POOL SIDE .png',
+            'assets/images/Habitaciones/Pool Side Doble/PORTADA - POOL SIDE DOBLE.png',
+            'assets/images/Habitaciones/Pool Side Doble/TERRAZA POOL SIDE.png',
+            'assets/images/Habitaciones/Pool Side Doble/POOL SIDE - TERRAZA.jpg',
+            'assets/images/Habitaciones/Pool Side Doble/POOL SIDE - TERRAZA (1).jpg',
+            'assets/images/Habitaciones/Master Suite/PORTADA - MASTER SUITE.jpg',
+            'assets/images/Habitaciones/Master Suite/ENTRADA MASTER SUITE.png',
+            'assets/images/Habitaciones/Master Suite/MASTER SUITE CAMA KING.png'
         ],
-        habitaciones: [],
         restaurante: [
             'assets/images/Galeria/Restaurante/portada_bohio.png',
             'assets/images/Galeria/Restaurante/restaurante_bohio.png',
@@ -280,7 +295,8 @@ function setupGalleryCarousels() {
             'assets/images/Galeria/Restaurante/italiano_terraza.png',
             'assets/images/Galeria/Restaurante/restaurante_italiano1.png',
             'assets/images/Galeria/Restaurante/restaurante_italiano2.png',
-            'assets/images/Galeria/Restaurante/restaurante_italiano3.jpeg'
+            'assets/images/Galeria/Restaurante/restaurante_italiano3.jpeg',
+            'assets/images/Galeria/Restaurante/restaurante_italiano4.png'
         ],
         piscina: [
             'assets/images/Galeria/Piscina/piscina1.png',
@@ -288,7 +304,6 @@ function setupGalleryCarousels() {
             'assets/images/Galeria/Piscina/piscina3.png',
             'assets/images/Galeria/Piscina/piscina4.png'
         ],
-        jardines: [],
         eventos: [
             'assets/images/Galeria/Eventos/eventos1.png',
             'assets/images/Galeria/Eventos/eventos2.png',
@@ -626,17 +641,17 @@ function setupReceptionCarousel() {
 function setupRoomCarousels() {
     const base = 'assets/images/Habitaciones/';
     const roomImages = {
-        'HABITACIÓN DOBLE': ['Habitacion Doble/PORTADA-HAB DOBLE.png', 'Habitacion Doble/PORTADA-HABITACIÓN DOBLE_.png', 'Habitacion Doble/hab.doble.png', 'Habitacion Doble/habitacion_doble2.png'],
-        'DOUBLE ROOM': ['Habitacion Doble/PORTADA-HAB DOBLE.png', 'Habitacion Doble/PORTADA-HABITACIÓN DOBLE_.png', 'Habitacion Doble/hab.doble.png', 'Habitacion Doble/habitacion_doble2.png'],
-        'DELUXE KING': ['Deluxe King/DELUXE KING.png', 'Deluxe King/portada_DKing.png'],
+        'HABITACIÓN DOBLE': ['Habitacion Doble/PORTADA-HAB DOBLE.png', 'Habitacion Doble/PORTADA-HABITACIÓN DOBLE .png', 'Habitacion Doble/HAB (1). DOBLE.png', 'Habitacion Doble/HAB (2). DOBLE.png'],
+        'DOUBLE ROOM': ['Habitacion Doble/PORTADA-HAB DOBLE.png', 'Habitacion Doble/PORTADA-HABITACIÓN DOBLE .png', 'Habitacion Doble/HAB (1). DOBLE.png', 'Habitacion Doble/HAB (2). DOBLE.png'],
+        'DELUXE KING': ['Deluxe King/DELUXE KING (1).png', 'Deluxe King/PORTADA-DELUXE KING SIZE (1).png'],
         'DELUXE DOBLE': ['Deluxe Doble/PORTADA-DELUXE DOBLE.png'],
         'DELUXE DOUBLE': ['Deluxe Doble/PORTADA-DELUXE DOBLE.png'],
         'JR. SUITE KING': ['JR. Suite King/PORTADA- JR. KING SIZE.png', 'JR. Suite King/JR. KING SIZE 1.png', 'JR. Suite King/JR. KING SIZE 2.png'],
-        'JR. SUITE DOBLE': ['JR. Suite Doble/PORTADA - JUNIOR SUITE DOBLE.png', 'JR. Suite Doble/Junior_Suite_Doble.png'],
-        'JR. SUITE DOUBLE': ['JR. Suite Doble/PORTADA - JUNIOR SUITE DOBLE.png', 'JR. Suite Doble/Junior_Suite_Doble.png'],
-        'POOL SIDE KING': ['Pool Side King/PORTADA - POOL SIDE_.png', 'Pool Side King/POOL SIDE - TERRAZA.jpg'],
-        'POOL SIDE DOBLE': ['Pool Side Doble/PORTADA - POOL SIDE DOBLE.png', 'Pool Side Doble/TERRAZA POOL SIDE.png'],
-        'POOL SIDE DOUBLE': ['Pool Side Doble/PORTADA - POOL SIDE DOBLE.png', 'Pool Side Doble/TERRAZA POOL SIDE.png'],
+        'JR. SUITE DOBLE': ['JR. Suite Doble/PORTADA - JUNIOR SUITE DOBLE.png', 'JR. Suite Doble/JUNIOR SUITE DOBLE (1).png'],
+        'JR. SUITE DOUBLE': ['JR. Suite Doble/PORTADA - JUNIOR SUITE DOBLE.png', 'JR. Suite Doble/JUNIOR SUITE DOBLE (1).png'],
+        'POOL SIDE KING': ['Pool Side King/PORTADA - POOL SIDE .png'],
+        'POOL SIDE DOBLE': ['Pool Side Doble/PORTADA - POOL SIDE DOBLE.png', 'Pool Side Doble/TERRAZA POOL SIDE.png', 'Pool Side Doble/POOL SIDE - TERRAZA.jpg', 'Pool Side Doble/POOL SIDE - TERRAZA (1).jpg'],
+        'POOL SIDE DOUBLE': ['Pool Side Doble/PORTADA - POOL SIDE DOBLE.png', 'Pool Side Doble/TERRAZA POOL SIDE.png', 'Pool Side Doble/POOL SIDE - TERRAZA.jpg', 'Pool Side Doble/POOL SIDE - TERRAZA (1).jpg'],
         'MASTER SUITE': ['Master Suite/PORTADA - MASTER SUITE.jpg', 'Master Suite/ENTRADA MASTER SUITE.png', 'Master Suite/MASTER SUITE CAMA KING.png']
     };
 
@@ -758,6 +773,47 @@ function setupHeaderShadow() {
     });
 }
 
+function setupImageLightbox() {
+    const lightbox = document.getElementById('imageLightbox');
+    const lightboxImage = lightbox?.querySelector('.image-lightbox-content');
+    const closeButton = lightbox?.querySelector('.image-lightbox-close');
+    if (!lightbox || !lightboxImage || !closeButton) return;
+
+    const close = () => {
+        lightbox.hidden = true;
+        lightboxImage.removeAttribute('src');
+        document.body.classList.remove('lightbox-open');
+    };
+
+    const open = image => {
+        loadCarouselSlide(image);
+        lightboxImage.src = image.currentSrc || image.src || image.dataset.src;
+        lightboxImage.alt = image.alt;
+        lightbox.hidden = false;
+        document.body.classList.add('lightbox-open');
+    };
+
+    document.querySelectorAll('.galeria-image img, .habitacion-image img, .restaurante-carousel img').forEach(image => {
+        image.addEventListener('click', event => {
+            event.stopPropagation();
+            open(image);
+        });
+    });
+
+    document.addEventListener('click', event => {
+        const image = event.target.closest?.('.galeria-image img, .habitacion-image img, .restaurante-carousel img');
+        if (image) open(image);
+    });
+
+    closeButton.addEventListener('click', close);
+    lightbox.addEventListener('click', event => {
+        if (event.target === lightbox) close();
+    });
+    document.addEventListener('keydown', event => {
+        if (event.key === 'Escape' && !lightbox.hidden) close();
+    });
+}
+
 // ── Inicialización ────────────────────────────────────────────────────────────
 
 document.addEventListener('DOMContentLoaded', function () {
@@ -770,6 +826,7 @@ document.addEventListener('DOMContentLoaded', function () {
     setupScrollAnimations();
     setupAnchorLinks();
     setupHeaderShadow();
+    setupImageLightbox();
 });
 
 console.log('Hotel Nacional David — Sitio web cargado correctamente');
