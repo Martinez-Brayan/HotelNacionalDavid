@@ -1,4 +1,4 @@
-
+﻿
 // Detecta el idioma desde la URL o el atributo lang del HTML.
 const requestedLanguage = new URLSearchParams(window.location.search).get('lang');
 const pageLang = requestedLanguage || document.documentElement.lang || 'es';
@@ -29,7 +29,7 @@ function watchCarouselLoading(container, slides) {
     observer.observe(container);
 }
 
-// ── Navegación ────────────────────────────────────────────────────────────────
+// â”€â”€ NavegaciÃ³n â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 function setupNavigation() {
     const hamburger = document.getElementById('hamburger');
@@ -63,7 +63,7 @@ function setupNavigation() {
     });
 }
 
-// ── Fechas ────────────────────────────────────────────────────────────────────
+// â”€â”€ Fechas â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 function formatDateToISO(date) {
     const year = date.getFullYear();
@@ -80,7 +80,7 @@ function setupDateInputs() {
     tomorrow.setDate(tomorrow.getDate() + 1);
     const tomorrowISO = formatDateToISO(tomorrow);
 
-    // Buscador rápido del hero
+    // Buscador rÃ¡pido del hero
     const checkinHero = document.getElementById('checkin');
     const checkoutHero = document.getElementById('checkout');
     if (checkinHero) {
@@ -117,7 +117,7 @@ function setupDateInputs() {
     if (checkoutForm) checkoutForm.min = tomorrowISO;
 }
 
-// ── Formularios ───────────────────────────────────────────────────────────────
+// â”€â”€ Formularios â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 function setupFormHandling() {
     const reservationForm = document.getElementById('formularioReserva');
@@ -183,7 +183,7 @@ function handleReservationSubmit(form) {
     if (!/^\d{13,19}$/.test(cardNumber)) {
         alert(isEn
             ? 'Enter the complete card number using 13 to 19 digits.'
-            : 'Ingresa la numeración completa de la tarjeta usando entre 13 y 19 dígitos.');
+            : 'Ingresa la numeraciÃ³n completa de la tarjeta usando entre 13 y 19 dÃ­gitos.');
         return;
     }
 
@@ -199,7 +199,7 @@ function handleReservationSubmit(form) {
     console.log('Datos de reserva:', data);
     alert(isEn
         ? 'Thank you! Your booking request has been received. We will contact you soon.'
-        : '¡Gracias! Tu reserva ha sido recibida. Nos pondremos en contacto pronto.');
+        : 'Â¡Gracias! Tu reserva ha sido recibida. Nos pondremos en contacto pronto.');
 
     form.reset();
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -212,19 +212,19 @@ function handleContactSubmit(form) {
     if (!data.nombre || !data.email || !data.telefono || !data.mensaje) {
         alert(isEn
             ? 'Please complete name, email, phone and message.'
-            : 'Completa nombre, email, teléfono y mensaje.');
+            : 'Completa nombre, email, telÃ©fono y mensaje.');
         return;
     }
 
     console.log('Mensaje de contacto:', data);
     alert(isEn
         ? 'Message sent! We will get back to you soon.'
-        : '¡Mensaje enviado! Te responderemos a la brevedad.');
+        : 'Â¡Mensaje enviado! Te responderemos a la brevedad.');
 
     form.reset();
 }
 
-// ── Buscador rápido ───────────────────────────────────────────────────────────
+// â”€â”€ Buscador rÃ¡pido â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 function setupQuickSearch() {
     const btnSearch = document.querySelector('.btn-search');
@@ -243,7 +243,7 @@ function setupQuickSearch() {
         const ci = new Date(checkin);
         const co = new Date(checkout);
         if (co <= ci) {
-            alert(isEn ? 'Invalid dates.' : 'Las fechas no son válidas.');
+            alert(isEn ? 'Invalid dates.' : 'Las fechas no son vÃ¡lidas.');
             return;
         }
 
@@ -256,8 +256,7 @@ function setupQuickSearch() {
         }, 500);
     });
 }
-// ── Carruseles de galería ───────────────────────────────────────────────────
-
+//carrusel de galeria
 function setupGalleryCarousels() {
     const galleryConfig = {
         recepcion: [
@@ -267,7 +266,6 @@ function setupGalleryCarousels() {
         ],
         habitaciones: [
             'assets/images/Habitaciones/Habitacion Doble/PORTADA-HAB DOBLE.png',
-            'assets/images/Habitaciones/Habitacion Doble/PORTADA-HABITACIÓN DOBLE .png',
             'assets/images/Habitaciones/Habitacion Doble/HAB (1). DOBLE.png',
             'assets/images/Habitaciones/Habitacion Doble/HAB (2). DOBLE.png',
             'assets/images/Habitaciones/Deluxe King/DELUXE KING (1).png',
@@ -288,21 +286,25 @@ function setupGalleryCarousels() {
             'assets/images/Habitaciones/Master Suite/MASTER SUITE CAMA KING.png'
         ],
         restaurante: [
-            'assets/images/Galeria/Restaurante/portada_bohio.png',
-            'assets/images/Galeria/Restaurante/restaurante_bohio.png',
-            'assets/images/Galeria/Restaurante/restaurante_bohio2.png',
-            'assets/images/Galeria/Restaurante/italiano_exterior.png',
-            'assets/images/Galeria/Restaurante/italiano_terraza.png',
-            'assets/images/Galeria/Restaurante/restaurante_italiano1.png',
-            'assets/images/Galeria/Restaurante/restaurante_italiano2.png',
-            'assets/images/Galeria/Restaurante/restaurante_italiano3.jpeg',
-            'assets/images/Galeria/Restaurante/restaurante_italiano4.png'
+            'assets/images/Galeria/Restaurante/Bohio/portada_bohio.png',
+            'assets/images/Galeria/Restaurante/Bohio/restaurante_bohio.png',
+            'assets/images/Galeria/Restaurante/Bohio/restaurante_bohio2.png',
+            'assets/images/Galeria/Restaurante/Italiano/italiano_exterior.png',
+            'assets/images/Galeria/Restaurante/Italiano/italiano_terraza.png',
+            'assets/images/Galeria/Restaurante/Italiano/restaurante_italiano1.png',
+            'assets/images/Galeria/Restaurante/Italiano/restaurante_italiano2.png',
+            'assets/images/Galeria/Restaurante/Italiano/restaurante_italiano3.jpeg',
+            'assets/images/Galeria/Restaurante/Italiano/restaurante_italiano4.png',
+            'assets/images/Galeria/Restaurante/Italiano/portada_terraza_italiano.png',
+            'assets/images/Galeria/Restaurante/Italiano/restaurante_italiano5.png',
+            'assets/images/Galeria/Restaurante/Italiano/restaurante_italiano6.png'
         ],
         piscina: [
             'assets/images/Galeria/Piscina/piscina1.png',
             'assets/images/Galeria/Piscina/piscina2.png',
             'assets/images/Galeria/Piscina/piscina3.png',
-            'assets/images/Galeria/Piscina/piscina4.png'
+            'assets/images/Galeria/Piscina/piscina4.png',
+            'assets/images/Galeria/Piscina/piscina5.png',
         ],
         eventos: [
             'assets/images/Galeria/Eventos/eventos1.png',
@@ -335,7 +337,7 @@ function setupGalleryCarousels() {
 
         const carousel = document.createElement('div');
         carousel.className = 'room-carousel';
-        carousel.setAttribute('aria-label', isEn ? `${key} photo gallery` : `Galería de ${key}`);
+        carousel.setAttribute('aria-label', isEn ? `${key} photo gallery` : `GalerÃ­a de ${key}`);
 
         const track = document.createElement('div');
         track.className = 'room-carousel-track';
@@ -346,7 +348,7 @@ function setupGalleryCarousels() {
             const source = encodeURI(path);
             image.dataset.src = source;
             image.loading = 'lazy';
-            image.alt = `${key} — ${index + 1}`;
+            image.alt = `${key} â€” ${index + 1}`;
             track.appendChild(image);
             return image;
         });
@@ -370,7 +372,7 @@ function setupGalleryCarousels() {
             dots.querySelectorAll('button').forEach((dot, i) => dot.classList.toggle('is-active', i === current));
         };
 
-        [['prev', '‹', -1], ['next', '›', 1]].forEach(([direction, symbol, change]) => {
+        [['prev', '\u2039', -1], ['next', '\u203A', 1]].forEach(([direction, symbol, change]) => {
             const button = document.createElement('button');
             button.className = `room-carousel-control room-carousel-${direction}`;
             button.type = 'button';
@@ -414,17 +416,20 @@ function setupGalleryCarousels() {
 function setupRestaurantCarousels() {
     const restaurantImages = {
         bohio: [
-            'assets/images/Galeria/Restaurante/portada_bohio.png',
-            'assets/images/Galeria/Restaurante/restaurante_bohio.png',
-            'assets/images/Galeria/Restaurante/restaurante_bohio2.png'
+            'assets/images/Galeria/Restaurante/Bohio/portada_bohio.png',
+            'assets/images/Galeria/Restaurante/Bohio/restaurante_bohio.png',
+            'assets/images/Galeria/Restaurante/Bohio/restaurante_bohio2.png'
         ],
         italiano: [
-            'assets/images/Galeria/Restaurante/italiano_exterior.png',
-            'assets/images/Galeria/Restaurante/italiano_terraza.png',
-            'assets/images/Galeria/Restaurante/restaurante_italiano1.png',
-            'assets/images/Galeria/Restaurante/restaurante_italiano2.png',
-            'assets/images/Galeria/Restaurante/restaurante_italiano3.jpeg',
-            'assets/images/Galeria/Restaurante/restaurante_italiano4.png'
+            'assets/images/Galeria/Restaurante/Italiano/italiano_exterior.png',
+            'assets/images/Galeria/Restaurante/Italiano/italiano_terraza.png',
+            'assets/images/Galeria/Restaurante/Italiano/portada_terraza_italiano.png',
+            'assets/images/Galeria/Restaurante/Italiano/restaurante_italiano1.png',
+            'assets/images/Galeria/Restaurante/Italiano/restaurante_italiano2.png',
+            'assets/images/Galeria/Restaurante/Italiano/restaurante_italiano3.jpeg',
+            'assets/images/Galeria/Restaurante/Italiano/restaurante_italiano4.png',
+            'assets/images/Galeria/Restaurante/Italiano/restaurante_italiano5.png',
+            'assets/images/Galeria/Restaurante/Italiano/restaurante_italiano6.png'
         ]
     };
 
@@ -440,7 +445,7 @@ function setupRestaurantCarousels() {
             const source = encodeURI(path);
             image.dataset.src = source;
             image.loading = 'lazy';
-            image.alt = `${container.dataset.restaurante} restaurant — ${index + 1}`;
+            image.alt = `${container.dataset.restaurante} restaurant â€” ${index + 1}`;
             track.appendChild(image);
             return image;
         });
@@ -456,7 +461,7 @@ function setupRestaurantCarousels() {
             container.querySelectorAll('.restaurante-dot').forEach((dot, dotIndex) => dot.classList.toggle('is-active', dotIndex === current));
         };
 
-        [['prev', '‹', -1], ['next', '›', 1]].forEach(([direction, symbol, change]) => {
+        [['prev', '\u2039', -1], ['next', '\u203A', 1]].forEach(([direction, symbol, change]) => {
             const button = document.createElement('button');
             button.className = `room-carousel-control room-carousel-${direction}`;
             button.type = 'button';
@@ -480,7 +485,7 @@ function setupRestaurantCarousels() {
     });
 }
 
-// ── Carrusel de Recepción ──────────────────────────────────────────────
+// â”€â”€ Carrusel de RecepciÃ³n â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 function setupReceptionCarousel() {
 
@@ -505,7 +510,7 @@ function setupReceptionCarousel() {
 
     carousel.setAttribute(
         'aria-label',
-        isEn ? 'Reception photo gallery' : 'Galería de recepción'
+        isEn ? 'Reception photo gallery' : 'GalerÃ­a de recepciÃ³n'
     );
 
     const track = document.createElement('div');
@@ -520,7 +525,7 @@ function setupReceptionCarousel() {
 
         image.src = encodeURI(base + path);
 
-        image.alt = `lobby — ${index + 1}`;
+        image.alt = `lobby â€” ${index + 1}`;
 
         track.appendChild(image);
 
@@ -563,8 +568,8 @@ function setupReceptionCarousel() {
     };
 
     [
-        ['prev', '‹', -1],
-        ['next', '›', 1]
+        ['prev', '\u2039', -1],
+        ['next', '\u203A', 1]
     ].forEach(([direction, symbol, change]) => {
 
         const button = document.createElement('button');
@@ -636,13 +641,13 @@ function setupReceptionCarousel() {
     startAutoAdvance();
 }
 
-// ── Carruseles de habitaciones ──────────────────────────────────────────────
+// â”€â”€ Carruseles de habitaciones â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 function setupRoomCarousels() {
     const base = 'assets/images/Habitaciones/';
     const roomImages = {
-        'HABITACIÓN DOBLE': ['Habitacion Doble/PORTADA-HAB DOBLE.png', 'Habitacion Doble/PORTADA-HABITACIÓN DOBLE .png', 'Habitacion Doble/HAB (1). DOBLE.png', 'Habitacion Doble/HAB (2). DOBLE.png'],
-        'DOUBLE ROOM': ['Habitacion Doble/PORTADA-HAB DOBLE.png', 'Habitacion Doble/PORTADA-HABITACIÓN DOBLE .png', 'Habitacion Doble/HAB (1). DOBLE.png', 'Habitacion Doble/HAB (2). DOBLE.png'],
+        'HABITACION DOBLE': ['Habitacion Doble/PORTADA-HAB DOBLE.png', 'Habitacion Doble/HAB (1). DOBLE.png', 'Habitacion Doble/HAB (2). DOBLE.png'],
+        'DOUBLE ROOM': ['Habitacion Doble/PORTADA-HAB DOBLE.png', 'Habitacion Doble/HAB (1). DOBLE.png', 'Habitacion Doble/HAB (2). DOBLE.png'],
         'DELUXE KING': ['Deluxe King/DELUXE KING (1).png', 'Deluxe King/PORTADA-DELUXE KING SIZE (1).png'],
         'DELUXE DOBLE': ['Deluxe Doble/PORTADA-DELUXE DOBLE.png'],
         'DELUXE DOUBLE': ['Deluxe Doble/PORTADA-DELUXE DOBLE.png'],
@@ -657,14 +662,15 @@ function setupRoomCarousels() {
 
     document.querySelectorAll('.habitacion-card').forEach(card => {
         const title = card.querySelector('h3')?.textContent.trim().toUpperCase();
-        const images = roomImages[title];
+        const normalizedTitle = title?.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+        const images = roomImages[normalizedTitle];
         const container = card.querySelector('.habitacion-image');
         if (!images || !container) return;
 
         const badge = container.querySelector('.habitacion-badge');
         const carousel = document.createElement('div');
         carousel.className = 'room-carousel';
-        carousel.setAttribute('aria-label', isEn ? `${title} photo gallery` : `Galería de ${title}`);
+        carousel.setAttribute('aria-label', isEn ? `${title} photo gallery` : `GalerÃ­a de ${title}`);
         const track = document.createElement('div');
         track.className = 'room-carousel-track';
         const slides = images.map((path, index) => {
@@ -673,7 +679,7 @@ function setupRoomCarousels() {
             const source = encodeURI(base + path);
             image.dataset.src = source;
             image.loading = 'lazy';
-            image.alt = `${title} — ${index + 1}`;
+            image.alt = `${title} â€” ${index + 1}`;
             track.appendChild(image);
             return image;
         });
@@ -693,7 +699,7 @@ function setupRoomCarousels() {
             slides.forEach((slide, i) => slide.classList.toggle('is-active', i === current));
             dots.querySelectorAll('button').forEach((dot, i) => dot.classList.toggle('is-active', i === current));
         };
-        [['prev', '‹', -1], ['next', '›', 1]].forEach(([direction, symbol, change]) => {
+        [['prev', '\u2039', -1], ['next', '\u203A', 1]].forEach(([direction, symbol, change]) => {
             const button = document.createElement('button');
             button.className = `room-carousel-control room-carousel-${direction}`;
             button.type = 'button';
@@ -724,7 +730,7 @@ function setupRoomCarousels() {
     });
 }
 
-// ── Animaciones de scroll ─────────────────────────────────────────────────────
+// â”€â”€ Animaciones de scroll â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 function setupScrollAnimations() {
     const observerOptions = {
@@ -747,7 +753,7 @@ function setupScrollAnimations() {
     });
 }
 
-// ── Anclas suaves ─────────────────────────────────────────────────────────────
+// â”€â”€ Anclas suaves â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 function setupAnchorLinks() {
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
@@ -761,7 +767,7 @@ function setupAnchorLinks() {
     });
 }
 
-// ── Sombra del header al hacer scroll ────────────────────────────────────────
+// â”€â”€ Sombra del header al hacer scroll â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 function setupHeaderShadow() {
     window.addEventListener('scroll', function () {
@@ -814,7 +820,7 @@ function setupImageLightbox() {
     });
 }
 
-// ── Inicialización ────────────────────────────────────────────────────────────
+// â”€â”€ InicializaciÃ³n â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 document.addEventListener('DOMContentLoaded', function () {
     setupNavigation();
@@ -829,4 +835,4 @@ document.addEventListener('DOMContentLoaded', function () {
     setupImageLightbox();
 });
 
-console.log('Hotel Nacional David — Sitio web cargado correctamente');
+console.log('Hotel Nacional David â€” Sitio web cargado correctamente');
