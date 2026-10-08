@@ -11,7 +11,7 @@ const translations = {
             bookNow: 'Reservar Ahora'
         },
         hero: {
-            title: 'Donde el descanso de tus sueños se hace realidad',
+            title: 'Tu descanso perfecto comienza aquí',
             subtitle: 'Habitaciones cómodas, excelente ubicación y atención personalizada',
             viewRooms: 'Ver Habitaciones',
             bookNow: 'Reservar Ahora'
@@ -86,7 +86,7 @@ const translations = {
             bookNow: 'Book Now'
         },
         hero: {
-            title: 'Where your dream rest becomes reality',
+            title: 'Your perfect stay starts here',
             subtitle: 'Comfortable rooms, excellent location and personalized service',
             viewRooms: 'View Rooms',
             bookNow: 'Book Now'

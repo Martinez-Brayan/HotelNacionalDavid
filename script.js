@@ -286,13 +286,9 @@ function setupGalleryCarousels() {
             'assets/images/Habitaciones/Master Suite/MASTER SUITE CAMA KING.png'
         ],
         restaurante: [
-            'assets/images/Galeria/Restaurante/Bohio/portada_bohio.png',
             'assets/images/Galeria/Restaurante/Bohio/restaurante_bohio.png',
             'assets/images/Galeria/Restaurante/Bohio/restaurante_bohio2.png',
-            'assets/images/Galeria/Restaurante/Italiano/italiano_exterior.png',
-            'assets/images/Galeria/Restaurante/Italiano/italiano_terraza.png',
-            'assets/images/Galeria/Restaurante/Italiano/restaurante_italiano1.png',
-            'assets/images/Galeria/Restaurante/Italiano/restaurante_italiano2.png',
+            'assets/images/Galeria/Restaurante/Bohio/restaurante_bohio3.png',
             'assets/images/Galeria/Restaurante/Italiano/restaurante_italiano3.jpeg',
             'assets/images/Galeria/Restaurante/Italiano/restaurante_italiano4.png',
             'assets/images/Galeria/Restaurante/Italiano/portada_terraza_italiano.png',
@@ -416,16 +412,12 @@ function setupGalleryCarousels() {
 function setupRestaurantCarousels() {
     const restaurantImages = {
         bohio: [
-            'assets/images/Galeria/Restaurante/Bohio/portada_bohio.png',
             'assets/images/Galeria/Restaurante/Bohio/restaurante_bohio.png',
-            'assets/images/Galeria/Restaurante/Bohio/restaurante_bohio2.png'
+            'assets/images/Galeria/Restaurante/Bohio/restaurante_bohio2.png',
+            'assets/images/Galeria/Restaurante/Bohio/restaurante_bohio3.png'
         ],
         italiano: [
-            'assets/images/Galeria/Restaurante/Italiano/italiano_exterior.png',
-            'assets/images/Galeria/Restaurante/Italiano/italiano_terraza.png',
             'assets/images/Galeria/Restaurante/Italiano/portada_terraza_italiano.png',
-            'assets/images/Galeria/Restaurante/Italiano/restaurante_italiano1.png',
-            'assets/images/Galeria/Restaurante/Italiano/restaurante_italiano2.png',
             'assets/images/Galeria/Restaurante/Italiano/restaurante_italiano3.jpeg',
             'assets/images/Galeria/Restaurante/Italiano/restaurante_italiano4.png',
             'assets/images/Galeria/Restaurante/Italiano/restaurante_italiano5.png',
@@ -783,18 +775,37 @@ function setupImageLightbox() {
     const lightbox = document.getElementById('imageLightbox');
     const lightboxImage = lightbox?.querySelector('.image-lightbox-content');
     const closeButton = lightbox?.querySelector('.image-lightbox-close');
-    if (!lightbox || !lightboxImage || !closeButton) return;
+    const previousButton = lightbox?.querySelector('.image-lightbox-prev');
+    const nextButton = lightbox?.querySelector('.image-lightbox-next');
+    if (!lightbox || !lightboxImage || !closeButton || !previousButton || !nextButton) return;
+
+    let lightboxSlides = [];
+    let lightboxIndex = 0;
+
+    const showSlide = index => {
+        if (!lightboxSlides.length) return;
+        lightboxIndex = (index + lightboxSlides.length) % lightboxSlides.length;
+        const image = lightboxSlides[lightboxIndex];
+        loadCarouselSlide(image);
+        lightboxImage.src = image.currentSrc || image.src || image.dataset.src;
+        lightboxImage.alt = image.alt;
+    };
 
     const close = () => {
         lightbox.hidden = true;
         lightboxImage.removeAttribute('src');
+        lightboxSlides = [];
+        lightboxIndex = 0;
         document.body.classList.remove('lightbox-open');
     };
 
     const open = image => {
-        loadCarouselSlide(image);
-        lightboxImage.src = image.currentSrc || image.src || image.dataset.src;
-        lightboxImage.alt = image.alt;
+        const carousel = image.closest('.room-carousel, .restaurante-carousel');
+        lightboxSlides = carousel
+            ? Array.from(carousel.querySelectorAll('.room-carousel-slide'))
+            : [image];
+        lightboxIndex = Math.max(0, lightboxSlides.indexOf(image));
+        showSlide(lightboxIndex);
         lightbox.hidden = false;
         document.body.classList.add('lightbox-open');
     };
@@ -812,11 +823,21 @@ function setupImageLightbox() {
     });
 
     closeButton.addEventListener('click', close);
+    const navigate = (direction, event) => {
+        event.stopPropagation();
+        event.preventDefault();
+        showSlide(lightboxIndex + direction);
+    };
+    previousButton.addEventListener('click', event => navigate(-1, event));
+    nextButton.addEventListener('click', event => navigate(1, event));
     lightbox.addEventListener('click', event => {
         if (event.target === lightbox) close();
     });
     document.addEventListener('keydown', event => {
-        if (event.key === 'Escape' && !lightbox.hidden) close();
+        if (lightbox.hidden) return;
+        if (event.key === 'Escape') close();
+        if (event.key === 'ArrowLeft') showSlide(lightboxIndex - 1);
+        if (event.key === 'ArrowRight') showSlide(lightboxIndex + 1);
     });
 }
 

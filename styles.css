@@ -237,6 +237,8 @@ body {
 
 .hero-title {
     display: block;
+    width: 100%;
+    text-align: center;
     font-family: 'Cinzel', Georgia, serif;
     font-size: clamp(2.5rem, 3.6vw, 3.2rem);
     line-height: 1.08;
@@ -319,7 +321,7 @@ body {
 .hero-image {
     width: 100%;
     max-width: 2000px;
-    aspect-ratio: 1448 / 990;
+    aspect-ratio: 16 / 9;
     margin: 0 auto;
     overflow: hidden;
 }
@@ -329,7 +331,7 @@ body {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    object-position: center bottom;
+    object-position: center center;
 }
 
 .hero-search-wrapper {
@@ -907,6 +909,8 @@ section {
 }
 
 .image-lightbox-content {
+    position: relative;
+    z-index: 1;
     max-width: min(1100px, 94vw);
     max-height: 88vh;
     width: auto;
@@ -918,6 +922,7 @@ section {
 
 .image-lightbox-close {
     position: absolute;
+    z-index: 10;
     top: 18px;
     right: 22px;
     width: 44px;
@@ -931,6 +936,52 @@ section {
     cursor: pointer;
 }
 
+.image-lightbox-control {
+    position: absolute;
+    top: 50%;
+    z-index: 2;
+    width: 30px;
+    height: 30px;
+    padding: 0;
+    transform: translateY(-50%);
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.45);
+    color: #fff;
+    cursor: pointer;
+    font-size: 1.45rem;
+    line-height: 1;
+    pointer-events: auto;
+}
+
+.image-lightbox-control:hover,
+.image-lightbox-control:focus-visible {
+    background: rgba(0, 0, 0, 0.75);
+    outline: 2px solid rgba(255, 255, 255, 0.8);
+    outline-offset: 2px;
+}
+
+.image-lightbox-control::before {
+    display: block;
+    line-height: 1;
+}
+
+.image-lightbox-prev {
+    left: 16px;
+}
+
+.image-lightbox-next {
+    right: 16px;
+}
+
+.image-lightbox-prev::before {
+    content: '\2039';
+}
+
+.image-lightbox-next::before {
+    content: '\203A';
+}
+
 .galeria-image .room-carousel {
     width: 100%;
     height: 100%;
@@ -940,7 +991,7 @@ section {
 }
 
 .galeria-caption {
-    display: block;
+    z-index: 0;
     width: 100%;
     background: #efebe4;
     color: #3e3e3e;
@@ -953,7 +1004,7 @@ section {
     text-transform: uppercase;
 }
 
-.galeria-item:hover .galeria-caption {
+    z-index: 2;
     background: #e4ddcf;
     color: var(--primary-color);
 }
@@ -967,11 +1018,11 @@ section {
 .eyebrow {
     display: inline-block;
     margin-bottom: 12px;
-    letter-spacing: 0.16em;
+    left: clamp(8px, 3vw, 24px);
     text-transform: uppercase;
     font-size: 0.73rem;
     font-weight: 800;
-    color: var(--accent-strong);
+    right: clamp(8px, 3vw, 24px);
 }
 
 .eyebrow-dark {
@@ -1250,9 +1301,12 @@ section {
     padding: 14px 14px;
     border: 1px solid rgba(13, 59, 63, 0.18);
     border-radius: 12px;
-    font-size: 1rem;
+    font-size: 1.45rem;
     font-family: inherit;
     background: rgba(248, 245, 240, 0.9);
+    display: grid;
+    place-items: center;
+    pointer-events: auto;
     transition: all 0.25s ease;
 }
 
