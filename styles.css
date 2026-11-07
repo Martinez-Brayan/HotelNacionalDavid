@@ -1289,6 +1289,20 @@ section {
     grid-column: 1 / -1;
 }
 
+.additional-guests-group[hidden] {
+    display: none;
+}
+
+.additional-guests-group label {
+    flex-direction: row;
+    align-items: center;
+    gap: 8px;
+}
+
+.additional-guests-group label input[type="checkbox"] {
+    width: auto;
+}
+
 .form-group label {
     font-weight: 600;
     margin-bottom: 8px;

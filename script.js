@@ -138,33 +138,165 @@ function setupFormHandling() {
     }
 
     setupCardNumberFormatting();
-    setupExpiryYearOptions();
+    setupExpiryFormatting();
+    setupRoomBooking();
     setupDateInputs();
-}
-
-function setupExpiryYearOptions() {
-    const expiryYearSelect = document.querySelector('select[name="anioVencimiento"]');
-    if (!expiryYearSelect) return;
-
-    const placeholder = expiryYearSelect.querySelector('option[value=""]');
-    expiryYearSelect.replaceChildren(placeholder);
-
-    const currentYear = new Date().getFullYear();
-    for (let year = currentYear; year <= currentYear + 15; year += 1) {
-        const option = document.createElement('option');
-        option.value = String(year);
-        option.textContent = String(year);
-        expiryYearSelect.appendChild(option);
-    }
 }
 
 function setupCardNumberFormatting() {
     const cardNumberInput = document.querySelector('input[name="numeroTarjeta"]');
+    const cardTypeSelect = document.querySelector('select[name="tipoTarjeta"]');
     if (!cardNumberInput) return;
 
     cardNumberInput.addEventListener('input', function () {
         const digits = this.value.replace(/\D/g, '').slice(0, 19);
         this.value = digits.replace(/(.{4})/g, '$1 ').trim();
+
+        const mastercard = isMastercardNumber(digits);
+        if (cardTypeSelect) {
+            cardTypeSelect.value = digits.startsWith('4') ? 'visa' : mastercard ? 'mastercard' : '';
+        }
+    });
+}
+
+function isMastercardNumber(cardNumber) {
+    const classicRange = /^(5[1-5])\d{2}/.test(cardNumber);
+    const modernPrefix = Number(cardNumber.slice(0, 4));
+    const modernRange = modernPrefix >= 2221 && modernPrefix <= 2720;
+    return classicRange || modernRange;
+}
+
+function passesLuhnCheck(cardNumber) {
+    let sum = 0;
+    let shouldDouble = false;
+
+    for (let index = cardNumber.length - 1; index >= 0; index -= 1) {
+        let digit = Number(cardNumber[index]);
+        if (shouldDouble) {
+            digit *= 2;
+            if (digit > 9) digit -= 9;
+        }
+        sum += digit;
+        shouldDouble = !shouldDouble;
+    }
+
+    return sum % 10 === 0;
+}
+
+function setupExpiryFormatting() {
+    const expiryInput = document.querySelector('input[name="vencimiento"]');
+    if (!expiryInput) return;
+
+    expiryInput.addEventListener('input', function () {
+        const digits = this.value.replace(/\D/g, '').slice(0, 4);
+        this.value = digits.length > 2 ? `${digits.slice(0, 2)}/${digits.slice(2)}` : digits;
+    });
+}
+
+function setupRoomBooking() {
+    const form = document.getElementById('formularioReserva');
+    const roomSelect = form?.querySelector('select[name="habitacion"]');
+    const guestsInput = form?.querySelector('input[name="personas"]');
+    const additionalGroup = form?.querySelector('.additional-guests-group');
+    const additionalCheckbox = form?.querySelector('input[name="permiteAdicionales"]');
+    const additionalInput = form?.querySelector('input[name="personasAdicionales"]');
+    if (!form || !roomSelect || !guestsInput || !additionalGroup || !additionalCheckbox || !additionalInput) return;
+
+    const options = Array.from(roomSelect.options).slice(1);
+    const roomLimits = {
+        'habitacion-doble': { max: 2, base: 2 },
+        'double-room': { max: 2, base: 2 },
+        'deluxe-king': { max: 2, base: 2 },
+        'deluxe-doble': { max: 4, base: 2 },
+        'deluxe-double': { max: 4, base: 2 },
+        'jr-suite-king': { max: 2, base: 2 },
+        'jr-suite-doble': { max: 4, base: 3 },
+        'jr-suite-double': { max: 4, base: 3 },
+        'pool-side-king': { max: 2, base: 2 },
+        'pool-side-doble': { max: 4, base: 2 },
+        'pool-side-double': { max: 4, base: 2 },
+        'master-suite': { max: 5, base: 5 }
+    };
+    const updateRoomLimits = option => {
+        const limits = roomLimits[option?.value] || { max: 10, base: 1 };
+        const maxGuests = limits.max;
+        const baseGuests = limits.base;
+        const allowsAdditional = maxGuests > baseGuests;
+
+        option.dataset.maxGuests = String(maxGuests);
+        option.dataset.baseGuests = String(baseGuests);
+        option.dataset.maxAdditionalGuests = String(maxGuests - baseGuests);
+        guestsInput.max = String(baseGuests);
+        guestsInput.value = String(Math.min(baseGuests, maxGuests));
+        additionalGroup.hidden = !allowsAdditional;
+        additionalCheckbox.disabled = false;
+        additionalCheckbox.checked = allowsAdditional;
+        additionalInput.disabled = !allowsAdditional;
+        additionalInput.required = allowsAdditional;
+        additionalInput.value = '';
+        additionalInput.max = String(maxGuests - baseGuests);
+    };
+
+    const updateAdditionalLimit = () => {
+        const option = roomSelect.selectedOptions[0];
+        const maxGuests = Number(option?.dataset.maxGuests || 10);
+        const baseGuests = Number(option?.dataset.baseGuests || maxGuests);
+        const maxAdditionalGuests = Number(option?.dataset.maxAdditionalGuests || 0);
+        let guests = Math.max(1, Number(guestsInput.value) || 1);
+        if (guests > baseGuests) {
+            guests = baseGuests;
+            guestsInput.value = String(baseGuests);
+        }
+        const remaining = Math.min(maxAdditionalGuests, Math.max(0, maxGuests - guests));
+        additionalInput.max = String(remaining);
+
+        if (remaining === 0) {
+            additionalCheckbox.checked = false;
+            additionalInput.value = '';
+            additionalInput.disabled = true;
+            additionalInput.required = false;
+        } else if (additionalCheckbox.checked) {
+            additionalInput.disabled = false;
+            additionalInput.required = true;
+        }
+
+        if (Number(additionalInput.value) > remaining) {
+            additionalInput.value = String(remaining);
+        }
+    };
+
+    roomSelect.addEventListener('change', () => updateRoomLimits(roomSelect.selectedOptions[0]));
+    guestsInput.addEventListener('input', updateAdditionalLimit);
+    const setAdditionalGuestsState = enabled => {
+        additionalCheckbox.checked = enabled;
+        additionalInput.disabled = !enabled;
+        additionalInput.required = enabled;
+        if (!enabled) additionalInput.value = '';
+    };
+
+    additionalCheckbox.addEventListener('change', () => {
+        setAdditionalGuestsState(additionalCheckbox.checked);
+        updateAdditionalLimit();
+    });
+
+    additionalInput.addEventListener('focus', () => {
+        if (!additionalCheckbox.disabled && !additionalCheckbox.checked) {
+            setAdditionalGuestsState(true);
+        }
+        updateAdditionalLimit();
+    });
+
+    additionalInput.addEventListener('input', updateAdditionalLimit);
+
+    const cards = Array.from(document.querySelectorAll('.habitacion-card'));
+    cards.forEach((card, index) => {
+        const button = card.querySelector('a[href="#reservar"]');
+        const option = options[index];
+        if (!button || !option) return;
+        button.addEventListener('click', () => {
+            roomSelect.value = option.value;
+            updateRoomLimits(option);
+        });
     });
 }
 
@@ -172,10 +304,26 @@ function handleReservationSubmit(form) {
     const formData = new FormData(form);
     const data = Object.fromEntries(formData);
 
-    if (!data.habitacion || !data.nombre || !data.email || !data.telefono || !data.checkin || !data.checkout || !data.tipoTarjeta || !data.numeroTarjeta || !data.mesVencimiento || !data.anioVencimiento) {
+    if (!data.habitacion || !data.nombre || !data.email || !data.telefono || !data.checkin || !data.checkout || !data.tipoTarjeta || !data.numeroTarjeta || !data.vencimiento) {
         alert(isEn
             ? 'Please complete all required fields, including the card information.'
             : 'Por favor completa todos los campos requeridos, incluyendo los datos de la tarjeta.');
+        return;
+    }
+
+    const selectedRoom = form.querySelector('select[name="habitacion"]')?.selectedOptions[0];
+    const maximumGuests = Number(selectedRoom?.dataset.maxGuests || 0);
+    const baseGuests = Number(selectedRoom?.dataset.baseGuests || maximumGuests);
+    const maximumAdditionalGuests = Number(selectedRoom?.dataset.maxAdditionalGuests || 0);
+    const guests = Number(data.personas);
+    const additionalGuests = Number(data.personasAdicionales || 0);
+    if (!Number.isInteger(guests) || guests < 1 || guests > baseGuests ||
+        !Number.isInteger(additionalGuests) || additionalGuests < 0 ||
+        additionalGuests > maximumAdditionalGuests ||
+        (maximumGuests > 0 && guests + additionalGuests > maximumGuests)) {
+        alert(isEn
+            ? `The room includes up to ${baseGuests} guest(s) and allows up to ${maximumAdditionalGuests} additional guest(s).`
+            : `La habitación incluye hasta ${baseGuests} persona(s) y permite hasta ${maximumAdditionalGuests} persona(s) adicional(es).`);
         return;
     }
 
@@ -184,6 +332,36 @@ function handleReservationSubmit(form) {
         alert(isEn
             ? 'Enter the complete card number using 13 to 19 digits.'
             : 'Ingresa la numeraciÃ³n completa de la tarjeta usando entre 13 y 19 dÃ­gitos.');
+        return;
+    }
+
+    const detectedCardType = cardNumber.startsWith('4')
+        ? 'visa'
+        : isMastercardNumber(cardNumber)
+            ? 'mastercard'
+            : '';
+    const validLength = detectedCardType === 'mastercard'
+        ? cardNumber.length === 16
+        : [13, 16, 19].includes(cardNumber.length);
+    if (!detectedCardType || !validLength || !passesLuhnCheck(cardNumber) ||
+        data.tipoTarjeta !== detectedCardType) {
+        alert(isEn
+            ? 'Enter a valid Visa or Mastercard card number.'
+            : 'Ingresa un número válido de Visa o Mastercard.');
+        return;
+    }
+
+    const expiryMatch = String(data.vencimiento).match(/^(0[1-9]|1[0-2])\/(\d{2})$/);
+    if (!expiryMatch) {
+        alert(isEn ? 'Enter the expiration date as MM/YY.' : 'Ingresa el vencimiento en formato MM/AA.');
+        return;
+    }
+    const expiryMonth = Number(expiryMatch[1]);
+    const expiryYear = 2000 + Number(expiryMatch[2]);
+    const now = new Date();
+    if (expiryYear < now.getFullYear() ||
+        (expiryYear === now.getFullYear() && expiryMonth < now.getMonth() + 1)) {
+        alert(isEn ? 'The card has expired.' : 'La tarjeta está vencida.');
         return;
     }
 
