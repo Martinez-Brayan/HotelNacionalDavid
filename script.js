@@ -29,7 +29,7 @@ function watchCarouselLoading(container, slides) {
     observer.observe(container);
 }
 
-// â”€â”€ NavegaciÃ³n â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── Navegación ────────────────────────────────────────────────────────────────
 
 function setupNavigation() {
     const hamburger = document.getElementById('hamburger');
@@ -63,13 +63,19 @@ function setupNavigation() {
     });
 }
 
-// â”€â”€ Fechas â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── Fechas ────────────────────────────────────────────────────────────────────
 
 function formatDateToISO(date) {
     const year = date.getFullYear();
     const month = String(date.getMonth() + 1).padStart(2, '0');
     const day = String(date.getDate()).padStart(2, '0');
     return `${year}-${month}-${day}`;
+}
+
+function nextDayISO(isoDate) {
+    const [year, month, day] = String(isoDate).split('-').map(Number);
+    const next = new Date(year, month - 1, day + 1);
+    return Number.isNaN(next.getTime()) ? '' : formatDateToISO(next);
 }
 
 function setupDateInputs() {
@@ -80,16 +86,14 @@ function setupDateInputs() {
     tomorrow.setDate(tomorrow.getDate() + 1);
     const tomorrowISO = formatDateToISO(tomorrow);
 
-    // Buscador rÃ¡pido del hero
+    // Buscador rápido del hero
     const checkinHero = document.getElementById('checkin');
     const checkoutHero = document.getElementById('checkout');
     if (checkinHero) {
         checkinHero.min = todayISO;
         checkinHero.addEventListener('change', function () {
             if (checkoutHero) {
-                const nextDay = new Date(this.value);
-                nextDay.setDate(nextDay.getDate() + 1);
-                checkoutHero.min = formatDateToISO(nextDay);
+                checkoutHero.min = nextDayISO(this.value);
                 if (checkoutHero.value && checkoutHero.value <= this.value) {
                     checkoutHero.value = '';
                 }
@@ -105,9 +109,7 @@ function setupDateInputs() {
         checkinForm.min = todayISO;
         checkinForm.addEventListener('change', function () {
             if (checkoutForm) {
-                const nextDay = new Date(this.value);
-                nextDay.setDate(nextDay.getDate() + 1);
-                checkoutForm.min = formatDateToISO(nextDay);
+                checkoutForm.min = nextDayISO(this.value);
                 if (checkoutForm.value && checkoutForm.value <= this.value) {
                     checkoutForm.value = '';
                 }
@@ -117,7 +119,7 @@ function setupDateInputs() {
     if (checkoutForm) checkoutForm.min = tomorrowISO;
 }
 
-// â”€â”€ Formularios â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── Formularios ───────────────────────────────────────────────────────────────
 
 function setupFormHandling() {
     const reservationForm = document.getElementById('formularioReserva');
@@ -331,7 +333,7 @@ function handleReservationSubmit(form) {
     if (!/^\d{13,19}$/.test(cardNumber)) {
         alert(isEn
             ? 'Enter the complete card number using 13 to 19 digits.'
-            : 'Ingresa la numeraciÃ³n completa de la tarjeta usando entre 13 y 19 dÃ­gitos.');
+            : 'Ingresa la numeración completa de la tarjeta usando entre 13 y 19 dígitos.');
         return;
     }
 
@@ -365,6 +367,14 @@ function handleReservationSubmit(form) {
         return;
     }
 
+    const todayISO = formatDateToISO(new Date());
+    if (data.checkin < todayISO) {
+        alert(isEn
+            ? 'Check-in date cannot be in the past.'
+            : 'La fecha de llegada no puede ser anterior a hoy.');
+        return;
+    }
+
     const checkin = new Date(data.checkin);
     const checkout = new Date(data.checkout);
     if (checkout <= checkin) {
@@ -374,10 +384,19 @@ function handleReservationSubmit(form) {
         return;
     }
 
-    console.log('Datos de reserva:', data);
+    // El número completo y el vencimiento de la tarjeta solo se usan para validar en este navegador.
+    // Lo que salga de aquí lleva únicamente la marca y los últimos 4 dígitos.
+    const payload = { ...data };
+    delete payload.numeroTarjeta;
+    delete payload.vencimiento;
+    delete payload.tipoTarjeta;
+    payload.tarjetaMarca = detectedCardType;
+    payload.tarjetaUltimos4 = cardNumber.slice(-4);
+
+    console.log('Datos de reserva:', payload);
     alert(isEn
         ? 'Thank you! Your booking request has been received. We will contact you soon.'
-        : 'Â¡Gracias! Tu reserva ha sido recibida. Nos pondremos en contacto pronto.');
+        : '¡Gracias! Tu reserva ha sido recibida. Nos pondremos en contacto pronto.');
 
     form.reset();
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -390,19 +409,18 @@ function handleContactSubmit(form) {
     if (!data.nombre || !data.email || !data.telefono || !data.mensaje) {
         alert(isEn
             ? 'Please complete name, email, phone and message.'
-            : 'Completa nombre, email, telÃ©fono y mensaje.');
+            : 'Completa nombre, email, teléfono y mensaje.');
         return;
     }
 
-    console.log('Mensaje de contacto:', data);
     alert(isEn
         ? 'Message sent! We will get back to you soon.'
-        : 'Â¡Mensaje enviado! Te responderemos a la brevedad.');
+        : '¡Mensaje enviado! Te responderemos a la brevedad.');
 
     form.reset();
 }
 
-// â”€â”€ Buscador rÃ¡pido â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── Buscador rápido ───────────────────────────────────────────────────────────
 
 function setupQuickSearch() {
     const btnSearch = document.querySelector('.btn-search');
@@ -421,7 +439,7 @@ function setupQuickSearch() {
         const ci = new Date(checkin);
         const co = new Date(checkout);
         if (co <= ci) {
-            alert(isEn ? 'Invalid dates.' : 'Las fechas no son vÃ¡lidas.');
+            alert(isEn ? 'Invalid dates.' : 'Las fechas no son válidas.');
             return;
         }
 
@@ -438,61 +456,61 @@ function setupQuickSearch() {
 function setupGalleryCarousels() {
     const galleryConfig = {
         recepcion: [
-            'assets/images/Galeria/Recepcion/lobby 1.png',
-            'assets/images/Galeria/Recepcion/lobby 2.png',
-            'assets/images/Galeria/Recepcion/recepcion.png'
+            'assets/images/Galeria/Recepcion/lobby 1.webp',
+            'assets/images/Galeria/Recepcion/lobby 2.webp',
+            'assets/images/Galeria/Recepcion/recepcion.webp'
         ],
         habitaciones: [
-            'assets/images/Habitaciones/Habitacion Doble/PORTADA-HAB DOBLE.png',
-            'assets/images/Habitaciones/Habitacion Doble/HAB (1). DOBLE.png',
-            'assets/images/Habitaciones/Habitacion Doble/HAB (2). DOBLE.png',
-            'assets/images/Habitaciones/Deluxe King/DELUXE KING (1).png',
-            'assets/images/Habitaciones/Deluxe King/PORTADA-DELUXE KING SIZE (1).png',
-            'assets/images/Habitaciones/Deluxe Doble/PORTADA-DELUXE DOBLE.png',
-            'assets/images/Habitaciones/JR. Suite King/PORTADA- JR. KING SIZE.png',
-            'assets/images/Habitaciones/JR. Suite King/JR. KING SIZE 1.png',
-            'assets/images/Habitaciones/JR. Suite King/JR. KING SIZE 2.png',
-            'assets/images/Habitaciones/JR. Suite Doble/PORTADA - JUNIOR SUITE DOBLE.png',
-            'assets/images/Habitaciones/JR. Suite Doble/JUNIOR SUITE DOBLE (1).png',
-            'assets/images/Habitaciones/Pool Side King/PORTADA - POOL SIDE .png',
-            'assets/images/Habitaciones/Pool Side Doble/PORTADA - POOL SIDE DOBLE.png',
-            'assets/images/Habitaciones/Pool Side Doble/TERRAZA POOL SIDE.png',
+            'assets/images/Habitaciones/Habitacion Doble/PORTADA-HAB DOBLE.webp',
+            'assets/images/Habitaciones/Habitacion Doble/HAB (1). DOBLE.webp',
+            'assets/images/Habitaciones/Habitacion Doble/HAB (2). DOBLE.webp',
+            'assets/images/Habitaciones/Deluxe King/DELUXE KING (1).webp',
+            'assets/images/Habitaciones/Deluxe King/PORTADA-DELUXE KING SIZE (1).webp',
+            'assets/images/Habitaciones/Deluxe Doble/PORTADA-DELUXE DOBLE.webp',
+            'assets/images/Habitaciones/JR. Suite King/PORTADA- JR. KING SIZE.webp',
+            'assets/images/Habitaciones/JR. Suite King/JR. KING SIZE 1.webp',
+            'assets/images/Habitaciones/JR. Suite King/JR. KING SIZE 2.webp',
+            'assets/images/Habitaciones/JR. Suite Doble/PORTADA - JUNIOR SUITE DOBLE.webp',
+            'assets/images/Habitaciones/JR. Suite Doble/JUNIOR SUITE DOBLE (1).webp',
+            'assets/images/Habitaciones/Pool Side King/PORTADA - POOL SIDE .webp',
+            'assets/images/Habitaciones/Pool Side Doble/PORTADA - POOL SIDE DOBLE.webp',
+            'assets/images/Habitaciones/Pool Side Doble/TERRAZA POOL SIDE.webp',
             'assets/images/Habitaciones/Pool Side Doble/POOL SIDE - TERRAZA.jpg',
             'assets/images/Habitaciones/Pool Side Doble/POOL SIDE - TERRAZA (1).jpg',
             'assets/images/Habitaciones/Master Suite/PORTADA - MASTER SUITE.jpg',
-            'assets/images/Habitaciones/Master Suite/ENTRADA MASTER SUITE.png',
-            'assets/images/Habitaciones/Master Suite/MASTER SUITE CAMA KING.png'
+            'assets/images/Habitaciones/Master Suite/ENTRADA MASTER SUITE.webp',
+            'assets/images/Habitaciones/Master Suite/MASTER SUITE CAMA KING.webp'
         ],
         restaurante: [
-            'assets/images/Galeria/Restaurante/Bohio/restaurante_bohio.png',
-            'assets/images/Galeria/Restaurante/Bohio/restaurante_bohio2.png',
-            'assets/images/Galeria/Restaurante/Bohio/restaurante_bohio3.png',
+            'assets/images/Galeria/Restaurante/Bohio/restaurante_bohio.webp',
+            'assets/images/Galeria/Restaurante/Bohio/restaurante_bohio2.webp',
+            'assets/images/Galeria/Restaurante/Bohio/restaurante_bohio3.webp',
             'assets/images/Galeria/Restaurante/Italiano/restaurante_italiano3.jpeg',
-            'assets/images/Galeria/Restaurante/Italiano/restaurante_italiano4.png',
-            'assets/images/Galeria/Restaurante/Italiano/portada_terraza_italiano.png',
-            'assets/images/Galeria/Restaurante/Italiano/restaurante_italiano5.png',
-            'assets/images/Galeria/Restaurante/Italiano/restaurante_italiano6.png'
+            'assets/images/Galeria/Restaurante/Italiano/restaurante_italiano4.webp',
+            'assets/images/Galeria/Restaurante/Italiano/portada_terraza_italiano.webp',
+            'assets/images/Galeria/Restaurante/Italiano/restaurante_italiano5.webp',
+            'assets/images/Galeria/Restaurante/Italiano/restaurante_italiano6.webp'
         ],
         piscina: [
-            'assets/images/Galeria/Piscina/piscina1.png',
-            'assets/images/Galeria/Piscina/piscina2.png',
-            'assets/images/Galeria/Piscina/piscina3.png',
-            'assets/images/Galeria/Piscina/piscina4.png',
-            'assets/images/Galeria/Piscina/piscina5.png',
+            'assets/images/Galeria/Piscina/piscina1.webp',
+            'assets/images/Galeria/Piscina/piscina2.webp',
+            'assets/images/Galeria/Piscina/piscina3.webp',
+            'assets/images/Galeria/Piscina/piscina4.webp',
+            'assets/images/Galeria/Piscina/piscina5.webp',
         ],
         eventos: [
-            'assets/images/Galeria/Eventos/eventos1.png',
-            'assets/images/Galeria/Eventos/eventos2.png',
-            'assets/images/Galeria/Eventos/eventos3.png',
-            'assets/images/Galeria/Eventos/eventos4.png',
-            'assets/images/Galeria/Eventos/eventos5.png',
-            'assets/images/Galeria/Eventos/eventos6.png'
+            'assets/images/Galeria/Eventos/eventos1.webp',
+            'assets/images/Galeria/Eventos/eventos2.webp',
+            'assets/images/Galeria/Eventos/eventos3.webp',
+            'assets/images/Galeria/Eventos/eventos4.webp',
+            'assets/images/Galeria/Eventos/eventos5.webp',
+            'assets/images/Galeria/Eventos/eventos6.webp'
         ],
         gimnasio: [
-            'assets/images/Galeria/Gimnasio/gimnasio1.png',
-            'assets/images/Galeria/Gimnasio/gimnasio2.png',
-            'assets/images/Galeria/Gimnasio/gimnasio3.png',
-            'assets/images/Galeria/Gimnasio/gimnasio4.png'
+            'assets/images/Galeria/Gimnasio/gimnasio1.webp',
+            'assets/images/Galeria/Gimnasio/gimnasio2.webp',
+            'assets/images/Galeria/Gimnasio/gimnasio3.webp',
+            'assets/images/Galeria/Gimnasio/gimnasio4.webp'
         ]
     };
 
@@ -511,7 +529,7 @@ function setupGalleryCarousels() {
 
         const carousel = document.createElement('div');
         carousel.className = 'room-carousel';
-        carousel.setAttribute('aria-label', isEn ? `${key} photo gallery` : `GalerÃ­a de ${key}`);
+        carousel.setAttribute('aria-label', isEn ? `${key} photo gallery` : `Galería de ${key}`);
 
         const track = document.createElement('div');
         track.className = 'room-carousel-track';
@@ -522,7 +540,7 @@ function setupGalleryCarousels() {
             const source = encodeURI(path);
             image.dataset.src = source;
             image.loading = 'lazy';
-            image.alt = `${key} â€” ${index + 1}`;
+            image.alt = `${key} — ${index + 1}`;
             track.appendChild(image);
             return image;
         });
@@ -590,16 +608,16 @@ function setupGalleryCarousels() {
 function setupRestaurantCarousels() {
     const restaurantImages = {
         bohio: [
-            'assets/images/Galeria/Restaurante/Bohio/restaurante_bohio.png',
-            'assets/images/Galeria/Restaurante/Bohio/restaurante_bohio2.png',
-            'assets/images/Galeria/Restaurante/Bohio/restaurante_bohio3.png'
+            'assets/images/Galeria/Restaurante/Bohio/restaurante_bohio.webp',
+            'assets/images/Galeria/Restaurante/Bohio/restaurante_bohio2.webp',
+            'assets/images/Galeria/Restaurante/Bohio/restaurante_bohio3.webp'
         ],
         italiano: [
-            'assets/images/Galeria/Restaurante/Italiano/portada_terraza_italiano.png',
+            'assets/images/Galeria/Restaurante/Italiano/portada_terraza_italiano.webp',
             'assets/images/Galeria/Restaurante/Italiano/restaurante_italiano3.jpeg',
-            'assets/images/Galeria/Restaurante/Italiano/restaurante_italiano4.png',
-            'assets/images/Galeria/Restaurante/Italiano/restaurante_italiano5.png',
-            'assets/images/Galeria/Restaurante/Italiano/restaurante_italiano6.png'
+            'assets/images/Galeria/Restaurante/Italiano/restaurante_italiano4.webp',
+            'assets/images/Galeria/Restaurante/Italiano/restaurante_italiano5.webp',
+            'assets/images/Galeria/Restaurante/Italiano/restaurante_italiano6.webp'
         ]
     };
 
@@ -615,7 +633,7 @@ function setupRestaurantCarousels() {
             const source = encodeURI(path);
             image.dataset.src = source;
             image.loading = 'lazy';
-            image.alt = `${container.dataset.restaurante} restaurant â€” ${index + 1}`;
+            image.alt = `${container.dataset.restaurante} restaurant — ${index + 1}`;
             track.appendChild(image);
             return image;
         });
@@ -655,16 +673,16 @@ function setupRestaurantCarousels() {
     });
 }
 
-// â”€â”€ Carrusel de RecepciÃ³n â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── Carrusel de Recepción ──────────────────────────────────────────────
 
 function setupReceptionCarousel() {
 
     const base = 'assets/images/Galeria/Recepcion/';
 
     const receptionImages = [
-        'lobby 1.png',
-        'lobby 2.png',
-        'recepcion.png'
+        'lobby 1.webp',
+        'lobby 2.webp',
+        'recepcion.webp'
     ];
 
     const container = document.querySelector(
@@ -680,7 +698,7 @@ function setupReceptionCarousel() {
 
     carousel.setAttribute(
         'aria-label',
-        isEn ? 'Reception photo gallery' : 'GalerÃ­a de recepciÃ³n'
+        isEn ? 'Reception photo gallery' : 'Galería de recepción'
     );
 
     const track = document.createElement('div');
@@ -695,7 +713,7 @@ function setupReceptionCarousel() {
 
         image.src = encodeURI(base + path);
 
-        image.alt = `lobby â€” ${index + 1}`;
+        image.alt = `lobby — ${index + 1}`;
 
         track.appendChild(image);
 
@@ -811,23 +829,23 @@ function setupReceptionCarousel() {
     startAutoAdvance();
 }
 
-// â”€â”€ Carruseles de habitaciones â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── Carruseles de habitaciones ──────────────────────────────────────────────
 
 function setupRoomCarousels() {
     const base = 'assets/images/Habitaciones/';
     const roomImages = {
-        'HABITACION DOBLE': ['Habitacion Doble/PORTADA-HAB DOBLE.png', 'Habitacion Doble/HAB (1). DOBLE.png', 'Habitacion Doble/HAB (2). DOBLE.png'],
-        'DOUBLE ROOM': ['Habitacion Doble/PORTADA-HAB DOBLE.png', 'Habitacion Doble/HAB (1). DOBLE.png', 'Habitacion Doble/HAB (2). DOBLE.png'],
-        'DELUXE KING': ['Deluxe King/DELUXE KING (1).png', 'Deluxe King/PORTADA-DELUXE KING SIZE (1).png'],
-        'DELUXE DOBLE': ['Deluxe Doble/PORTADA-DELUXE DOBLE.png'],
-        'DELUXE DOUBLE': ['Deluxe Doble/PORTADA-DELUXE DOBLE.png'],
-        'JR. SUITE KING': ['JR. Suite King/PORTADA- JR. KING SIZE.png', 'JR. Suite King/JR. KING SIZE 1.png', 'JR. Suite King/JR. KING SIZE 2.png'],
-        'JR. SUITE DOBLE': ['JR. Suite Doble/PORTADA - JUNIOR SUITE DOBLE.png', 'JR. Suite Doble/JUNIOR SUITE DOBLE (1).png'],
-        'JR. SUITE DOUBLE': ['JR. Suite Doble/PORTADA - JUNIOR SUITE DOBLE.png', 'JR. Suite Doble/JUNIOR SUITE DOBLE (1).png'],
-        'POOL SIDE KING': ['Pool Side King/PORTADA - POOL SIDE .png'],
-        'POOL SIDE DOBLE': ['Pool Side Doble/PORTADA - POOL SIDE DOBLE.png', 'Pool Side Doble/TERRAZA POOL SIDE.png', 'Pool Side Doble/POOL SIDE - TERRAZA.jpg', 'Pool Side Doble/POOL SIDE - TERRAZA (1).jpg'],
-        'POOL SIDE DOUBLE': ['Pool Side Doble/PORTADA - POOL SIDE DOBLE.png', 'Pool Side Doble/TERRAZA POOL SIDE.png', 'Pool Side Doble/POOL SIDE - TERRAZA.jpg', 'Pool Side Doble/POOL SIDE - TERRAZA (1).jpg'],
-        'MASTER SUITE': ['Master Suite/PORTADA - MASTER SUITE.jpg', 'Master Suite/ENTRADA MASTER SUITE.png', 'Master Suite/MASTER SUITE CAMA KING.png']
+        'HABITACION DOBLE': ['Habitacion Doble/PORTADA-HAB DOBLE.webp', 'Habitacion Doble/HAB (1). DOBLE.webp', 'Habitacion Doble/HAB (2). DOBLE.webp'],
+        'DOUBLE ROOM': ['Habitacion Doble/PORTADA-HAB DOBLE.webp', 'Habitacion Doble/HAB (1). DOBLE.webp', 'Habitacion Doble/HAB (2). DOBLE.webp'],
+        'DELUXE KING': ['Deluxe King/DELUXE KING (1).webp', 'Deluxe King/PORTADA-DELUXE KING SIZE (1).webp'],
+        'DELUXE DOBLE': ['Deluxe Doble/PORTADA-DELUXE DOBLE.webp'],
+        'DELUXE DOUBLE': ['Deluxe Doble/PORTADA-DELUXE DOBLE.webp'],
+        'JR. SUITE KING': ['JR. Suite King/PORTADA- JR. KING SIZE.webp', 'JR. Suite King/JR. KING SIZE 1.webp', 'JR. Suite King/JR. KING SIZE 2.webp'],
+        'JR. SUITE DOBLE': ['JR. Suite Doble/PORTADA - JUNIOR SUITE DOBLE.webp', 'JR. Suite Doble/JUNIOR SUITE DOBLE (1).webp'],
+        'JR. SUITE DOUBLE': ['JR. Suite Doble/PORTADA - JUNIOR SUITE DOBLE.webp', 'JR. Suite Doble/JUNIOR SUITE DOBLE (1).webp'],
+        'POOL SIDE KING': ['Pool Side King/PORTADA - POOL SIDE .webp'],
+        'POOL SIDE DOBLE': ['Pool Side Doble/PORTADA - POOL SIDE DOBLE.webp', 'Pool Side Doble/TERRAZA POOL SIDE.webp', 'Pool Side Doble/POOL SIDE - TERRAZA.jpg', 'Pool Side Doble/POOL SIDE - TERRAZA (1).jpg'],
+        'POOL SIDE DOUBLE': ['Pool Side Doble/PORTADA - POOL SIDE DOBLE.webp', 'Pool Side Doble/TERRAZA POOL SIDE.webp', 'Pool Side Doble/POOL SIDE - TERRAZA.jpg', 'Pool Side Doble/POOL SIDE - TERRAZA (1).jpg'],
+        'MASTER SUITE': ['Master Suite/PORTADA - MASTER SUITE.jpg', 'Master Suite/ENTRADA MASTER SUITE.webp', 'Master Suite/MASTER SUITE CAMA KING.webp']
     };
 
     document.querySelectorAll('.habitacion-card').forEach(card => {
@@ -840,7 +858,7 @@ function setupRoomCarousels() {
         const badge = container.querySelector('.habitacion-badge');
         const carousel = document.createElement('div');
         carousel.className = 'room-carousel';
-        carousel.setAttribute('aria-label', isEn ? `${title} photo gallery` : `GalerÃ­a de ${title}`);
+        carousel.setAttribute('aria-label', isEn ? `${title} photo gallery` : `Galería de ${title}`);
         const track = document.createElement('div');
         track.className = 'room-carousel-track';
         const slides = images.map((path, index) => {
@@ -849,7 +867,7 @@ function setupRoomCarousels() {
             const source = encodeURI(base + path);
             image.dataset.src = source;
             image.loading = 'lazy';
-            image.alt = `${title} â€” ${index + 1}`;
+            image.alt = `${title} — ${index + 1}`;
             track.appendChild(image);
             return image;
         });
@@ -900,7 +918,7 @@ function setupRoomCarousels() {
     });
 }
 
-// â”€â”€ Animaciones de scroll â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── Animaciones de scroll ─────────────────────────────────────────────────────
 
 function setupScrollAnimations() {
     const observerOptions = {
@@ -923,7 +941,7 @@ function setupScrollAnimations() {
     });
 }
 
-// â”€â”€ Anclas suaves â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── Anclas suaves ─────────────────────────────────────────────────────────────
 
 function setupAnchorLinks() {
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
@@ -937,7 +955,7 @@ function setupAnchorLinks() {
     });
 }
 
-// â”€â”€ Sombra del header al hacer scroll â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── Sombra del header al hacer scroll ────────────────────────────────────────
 
 function setupHeaderShadow() {
     window.addEventListener('scroll', function () {
@@ -1019,7 +1037,7 @@ function setupImageLightbox() {
     });
 }
 
-// â”€â”€ InicializaciÃ³n â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── Inicialización ────────────────────────────────────────────────────────────
 
 document.addEventListener('DOMContentLoaded', function () {
     setupNavigation();
@@ -1034,4 +1052,4 @@ document.addEventListener('DOMContentLoaded', function () {
     setupImageLightbox();
 });
 
-console.log('Hotel Nacional David â€” Sitio web cargado correctamente');
+console.log('Hotel Nacional David — Sitio web cargado correctamente');
